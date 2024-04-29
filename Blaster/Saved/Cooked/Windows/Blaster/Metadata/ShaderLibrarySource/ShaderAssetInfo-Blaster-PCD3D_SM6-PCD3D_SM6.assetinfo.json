@@ -1,0 +1,716 @@
+{
+	"AssetInfoVersion": 2,
+	"ShaderCodeToAssets": [
+		{
+			"ShaderMapHash": "B50225B621296AB17A02297A40BC534454190907",
+			"Assets": [
+				"/ControlRig/Controls/ControlRigGizmoMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "CBD766E5C7F036C7746D6E670A348CEDE2907B72",
+			"Assets": [
+				"/Engine/EngineMaterials/DefaultLightFunctionMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "A828548520046C7AE82AC74A676CE30E737A57CE",
+			"Assets": [
+				"/ControlRig/Controls/ControlRigXRayMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "4F268534CD07A3F89A40FC4CD573C6843E36CE58",
+			"Assets": [
+				"/Engine/EditorLandscapeResources/SplineEditorMeshMat"
+			]
+		},
+		{
+			"ShaderMapHash": "F989B6BE1446D2204086A572BDFAC53400427006",
+			"Assets": [
+				"/Engine/EngineDebugMaterials/M_SimpleUnlitTranslucent"
+			]
+		},
+		{
+			"ShaderMapHash": "AF7EE7B41940E914D6C6841CAB9118DEF14931CA",
+			"Assets": [
+				"/Engine/EditorMaterials/Camera/CineMat"
+			]
+		},
+		{
+			"ShaderMapHash": "2AB09E10044CC13E9F1B9EA63153FFD21A6129F3",
+			"Assets": [
+				"/Engine/VREditor/TransformGizmo/Xray"
+			]
+		},
+		{
+			"ShaderMapHash": "51C50338D752361D913839810D4B615AC8EDDEB7",
+			"Assets": [
+				"/Engine/VREditor/TransformGizmo/Main"
+			]
+		},
+		{
+			"ShaderMapHash": "98E838FC33D4991A82506E599A0D8AE17A5E2D74",
+			"Assets": [
+				"/Engine/VREditor/TransformGizmo/TranslucentTransformGizmoMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "90868A40B7AB6D3F2BB83A9AEEE52E4B9F027E84",
+			"Assets": [
+				"/Engine/EngineSky/M_SimpleSkyDome"
+			]
+		},
+		{
+			"ShaderMapHash": "FF134CE2F7623A9C0F6A5BB054538F21E4F83513",
+			"Assets": [
+				"/Engine/EditorMaterials/PhAT_UnselectedMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "ACDDDA422596AC07647647D8E10F10E2E747931B",
+			"Assets": [
+				"/Engine/EngineDebugMaterials/DebugEditorMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "9AABB121A5F0414CE24A730825840A6E176793A1",
+			"Assets": [
+				"/Engine/EditorMaterials/PhAT_NoCollisionMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "B9D9D3A2C44A34F2698C8CA92DE2195B4AAF914A",
+			"Assets": [
+				"/MeshModelingToolset/Materials/M_DynamicMeshComponentVtxColor"
+			]
+		},
+		{
+			"ShaderMapHash": "02167B508EF4FD95665733616DA28A12E339F9CC",
+			"Assets": [
+				"/Engine/EngineMaterials/GizmoMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "D07005492A47062F3A088D949EBDAC0A668212CD",
+			"Assets": [
+				"/Engine/EngineDebugMaterials/DebugMeshMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "6DCCF189439D5C85D6E45C3DC5DC4D7F0D9464B2",
+			"Assets": [
+				"/Engine/EngineMaterials/RemoveSurfaceMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "9B38122405828F7038641D77166CA160F673CE5E",
+			"Assets": [
+				"/Engine/EngineMaterials/NaniteHiddenSectionMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "C02D8C5CCBD4E144F85D97CD6848EF64F168E86D",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/building_materials/base_materials/M_base_color"
+			]
+		},
+		{
+			"ShaderMapHash": "8C9538878FDCED58147142CDA2787B3F693D421C",
+			"Assets": [
+				"/Game/Assets/Weapon/MilitaryWeapDark/FX/Materials/M_Tracer_A"
+			]
+		},
+		{
+			"ShaderMapHash": "F3948F7071F89DA98610116D5BD7476BC037BAF4",
+			"Assets": [
+				"/Engine/EngineDebugMaterials/M_VolumeRenderSphereTracePP"
+			]
+		},
+		{
+			"ShaderMapHash": "80B773999F6D988CEC7F1CB08E257111F1F0537F",
+			"Assets": [
+				"/Engine/EngineMaterials/FlattenMaterial_WS_Normal_VT"
+			]
+		},
+		{
+			"ShaderMapHash": "493114807F8639FABD397F6A3A85E2AF3D411E21",
+			"Assets": [
+				"/Engine/EngineMaterials/FlattenMaterial_VT",
+				"/Engine/EngineMaterials/FlattenMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "12073F173934F80832B4C9F151C3A1442AAC1EAF",
+			"Assets": [
+				"/Engine/EngineMaterials/M_InvalidLightmapSettings"
+			]
+		},
+		{
+			"ShaderMapHash": "F6E520724707F02567469AF2E212F38387015A04",
+			"Assets": [
+				"/Engine/EngineMaterials/EmissiveMeshMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "64B83BE151BC399B140D3F6EC3B52C9458276AA8",
+			"Assets": [
+				"/Paper2D/DefaultSpriteMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "66BECA609323CB4EE35B2F897FEB30C6CA44104E",
+			"Assets": [
+				"/Engine/EngineMaterials/PhAT_JointLimitMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "5FF672FD1603D61BD71DE3233A1D754AF9CD90A6",
+			"Assets": [
+				"/ControlRig/M_Manip"
+			]
+		},
+		{
+			"ShaderMapHash": "4EC6C62F9307054D28E620F34AC0C27EC8ECE374",
+			"Assets": [
+				"/Engine/VREditor/TransformGizmo/TransformGizmoMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "AC70C9F7FACEC8FE48585ADB7ACA59887511961B",
+			"Assets": [
+				"/Engine/EngineMaterials/Widget3DPassThrough",
+				"/Engine/EngineMaterials/Widget3DPassThrough_Translucent_OneSided"
+			]
+		},
+		{
+			"ShaderMapHash": "95C1953D3E3EB5152D1430BE74F2446DA3B48715",
+			"Assets": [
+				"/Engine/EngineSky/VolumetricClouds/m_SimpleVolumetricCloud"
+			]
+		},
+		{
+			"ShaderMapHash": "F53585789993A86E0C4BBDFB183077348E6B6671",
+			"Assets": [
+				"/Engine/EngineMaterials/DefaultPostProcessMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "F814DE32AF6B1AA7FBEEC32EAE8D565689281CD2",
+			"Assets": [
+				"/Engine/EngineMaterials/DefaultDeferredDecalMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "46CB04578EA1B1FE83488FF23FD0F2E9336EAF69",
+			"Assets": [
+				"/Engine/EngineMaterials/DefaultMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "63484E322FA749C69FED43FA382F4624C189FD2F",
+			"Assets": [
+				"/Engine/EngineMaterials/WorldGridMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "260CF42139BEC6E5B062AEE4F57905582BD0656B",
+			"Assets": [
+				"/Engine/EditorMaterials/PreviewShadowIndicatorMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "F4CBAB8D14A76E3361CB5783EAAA8BE6B529041A",
+			"Assets": [
+				"/Engine/EngineSky/M_Sky_Panning_Clouds2"
+			]
+		},
+		{
+			"ShaderMapHash": "763BAE88B1E3CC80F9E739C443AF3449C06701DD",
+			"Assets": [
+				"/Engine/EngineMaterials/DefaultTextMaterialOpaque"
+			]
+		},
+		{
+			"ShaderMapHash": "290615393927C85C1ED42E4CD3B5A1F6B7695A7A",
+			"Assets": [
+				"/Engine/EngineMaterials/PPM_DefaultCalibrationGrayscale"
+			]
+		},
+		{
+			"ShaderMapHash": "F5E6306EF49ED1E3AE0B095C9508D000F9CEF399",
+			"Assets": [
+				"/Engine/EngineMaterials/PPM_DefaultCalibrationColor"
+			]
+		},
+		{
+			"ShaderMapHash": "F14FC60F133F946E822FF3D7522CAC8B9C3836A6",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/postprocess_materials/M_postprocess"
+			]
+		},
+		{
+			"ShaderMapHash": "1EDBE89DE5476FE7AA00B1004F44AC8ED21DB164",
+			"Assets": [
+				"/Engine/EngineMaterials/DefaultParticle"
+			]
+		},
+		{
+			"ShaderMapHash": "2BDDBA904CDDAC6836D2A1FB1D8C159764C5508D",
+			"Assets": [
+				"/Game/Assets/Weapon/MilitaryWeapDark/FX/Materials/M_SparksImpact_2x2_01",
+				"/Game/Assets/Weapon/MilitaryWeapSilver/FX/Materials/M_SparksImpact_2x2_01",
+				"/Game/Assets/Weapon/MilitaryWeapSilver/FX/Materials/M_Pistol_MuzzleFlash_4x1_A",
+				"/Game/Assets/Weapon/MilitaryWeapDark/FX/Materials/M_RockSmall_01",
+				"/Game/Assets/Weapon/MilitaryWeapDark/FX/Materials/M_Pistol_MuzzleFlash_4x1_A"
+			]
+		},
+		{
+			"ShaderMapHash": "FB94C281E1878A1F0D1FC245254BC8527648E92C",
+			"Assets": [
+				"/Game/Assets/Weapon/MilitaryWeapSilver/Weapons/Materials/M_WeaponMaster_01"
+			]
+		},
+		{
+			"ShaderMapHash": "4C2C49C804A3B2EE8732478D7A31B09E07A7A25E",
+			"Assets": [
+				"/Game/Assets/FX/SmokeBeam/M_Beam"
+			]
+		},
+		{
+			"ShaderMapHash": "9A2786CB383AD6A6E0C8822C5C6DFC06BAB657FD",
+			"Assets": [
+				"/Game/Assets/Weapon/MilitaryWeapSilver/FX/Materials/M_Ember_Speed_01",
+				"/Game/Assets/Weapon/MilitaryWeapDark/FX/Materials/M_Ember_Speed_01"
+			]
+		},
+		{
+			"ShaderMapHash": "E3C67A5D4CF190278FDFFCF30280CC8C1F3A2743",
+			"Assets": [
+				"/Game/Assets/ParagonDekker/FX/Materials/Tech/M_Spline_Light_Scanner"
+			]
+		},
+		{
+			"ShaderMapHash": "666904701CBEDFBCD472B9DD11293A11E64BE770",
+			"Assets": [
+				"/Game/Assets/ParagonDekker/FX/Materials/Trails/M_Bullet_Trail",
+				"/Game/Assets/ParagonWraith/FX/Materials/Trails/M_Bullet_Trail"
+			]
+		},
+		{
+			"ShaderMapHash": "7B44135C3CA0FDC1E9F90C80074658C74A34A319",
+			"Assets": [
+				"/Game/Assets/ParagonDekker/FX/Materials/Flares/M_Lensflare_TB_SoftGlow"
+			]
+		},
+		{
+			"ShaderMapHash": "782351A49810CDD7DD422BAF939F88EEB7152B62",
+			"Assets": [
+				"/Game/Assets/ParagonDekker/FX/Materials/Flares/M_Lensflare_TB_Soft"
+			]
+		},
+		{
+			"ShaderMapHash": "006373435CBE16D522B9D90E88899B0A6E0CBA68",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/building_materials/base_materials/M_wall_panel"
+			]
+		},
+		{
+			"ShaderMapHash": "D65B0081D500110831FE52B6A062A550D8F1B4CB",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/sky_materials/M_sky"
+			]
+		},
+		{
+			"ShaderMapHash": "156EFD6D10BAC3C7E0548090F5CB23F6C045B8B0",
+			"Assets": [
+				"/Game/Assets/Weapon/MilitaryWeapDark/FX/Materials/M_Debris_Tileable_01"
+			]
+		},
+		{
+			"ShaderMapHash": "2440A10CF71909F8BC25630C4523A97C433C63E0",
+			"Assets": [
+				"/Engine/EngineMaterials/Widget3DPassThrough_Translucent"
+			]
+		},
+		{
+			"ShaderMapHash": "DA739722D2DD91FC3FB720E4E94666CCD0DE30A6",
+			"Assets": [
+				"/Game/Assets/Weapon/MilitaryWeapSilver/FX/Materials/M_Explosion_8x8_A_01",
+				"/Game/Assets/Weapon/MilitaryWeapDark/FX/Materials/M_Explosion_8x8_A_01"
+			]
+		},
+		{
+			"ShaderMapHash": "6681948349E403502FCE29FA1DFA61D57CFA9B63",
+			"Assets": [
+				"/SpeedTreeImporter/SpeedTree9/SpeedTreeBillboardMaster"
+			]
+		},
+		{
+			"ShaderMapHash": "1512E290F58FDA3E73EDAA0E2B33385D451E6E62",
+			"Assets": [
+				"/SpeedTreeImporter/SpeedTree9/SpeedTreeMaster"
+			]
+		},
+		{
+			"ShaderMapHash": "52D57095BEA69D4D4A0A643F27365DE9CC54F3F3",
+			"Assets": [
+				"/Game/Assets/Weapon/MilitaryWeapSilver/FX/Materials/M_Pistol_Streaks_01",
+				"/Game/Assets/Weapon/MilitaryWeapSilver/FX/Materials/M_AssaultRifle_MuzzleFlash_4x1",
+				"/Game/Assets/Weapon/MilitaryWeapDark/FX/Materials/M_Pistol_Streaks_01"
+			]
+		},
+		{
+			"ShaderMapHash": "5A9D16962A718805802DD36580F6D9CA0C09C5C9",
+			"Assets": [
+				"/Game/Assets/Weapon/MilitaryWeapDark/FX/Materials/M_Smoke_8x8_B_01",
+				"/Game/Assets/Weapon/MilitaryWeapSilver/FX/Materials/M_Smoke_8x8_B_01"
+			]
+		},
+		{
+			"ShaderMapHash": "34180049BDFFB7B5104B445B0E42F1AE7CE28C13",
+			"Assets": [
+				"/Game/Assets/Weapon/MilitaryWeapSilver/FX/Materials/M_GlowSphere_01",
+				"/Game/Assets/Weapon/MilitaryWeapDark/FX/Materials/M_GlowSphere_01"
+			]
+		},
+		{
+			"ShaderMapHash": "53E9A90E55CC6E3D6866B0520D9E6890ED61EC13",
+			"Assets": [
+				"/Game/Assets/Weapon/MilitaryWeapSilver/FX/Materials/M_Pistol_Smoke_2x2_A",
+				"/Game/Assets/Weapon/MilitaryWeapDark/FX/Materials/M_Pistol_Smoke_2x2_A"
+			]
+		},
+		{
+			"ShaderMapHash": "9E03E67360FAEDE0F9DB085DEBFB8A03CD32FB70",
+			"Assets": [
+				"/Paper2D/OpaqueUnlitSpriteMaterial"
+			]
+		},
+		{
+			"ShaderMapHash": "60B9747955E6849EF9B1DBA8ACAD79A1B9B5932C",
+			"Assets": [
+				"/Engine/EngineMaterials/Widget3DPassThrough_Masked"
+			]
+		},
+		{
+			"ShaderMapHash": "170FB8178F3713A643A5F5B7855BD1292D349E29",
+			"Assets": [
+				"/Engine/EngineMaterials/Widget3DPassThrough_Opaque"
+			]
+		},
+		{
+			"ShaderMapHash": "9E4CAB5CE48B729F4F093DB3D4CA71CC9BE12D6B",
+			"Assets": [
+				"/Game/Assets/Weapon/MilitaryWeapDark/FX/Materials/M_LightRay_01",
+				"/Game/Assets/Weapon/MilitaryWeapSilver/FX/Materials/M_LightRay_01"
+			]
+		},
+		{
+			"ShaderMapHash": "F77A3125BAC4850DBF7FE67D0DE5C499F4987EA0",
+			"Assets": [
+				"/Game/Assets/Weapon/MilitaryWeapDark/FX/Materials/M_Shockwave_Refraction_01",
+				"/Game/Assets/Weapon/MilitaryWeapSilver/FX/Materials/M_Shockwave_Refraction_01"
+			]
+		},
+		{
+			"ShaderMapHash": "BF5164DFAC7E21CF5D01AA15123BB965980363AF",
+			"Assets": [
+				"/Game/Assets/Weapon/MilitaryWeapDark/FX/Materials/M_SmokeRibbon_01",
+				"/Game/Assets/Weapon/MilitaryWeapSilver/FX/Materials/M_SmokeRibbon_01"
+			]
+		},
+		{
+			"ShaderMapHash": "FD8B643D1C4E2CBC4923252014915B9A02064810",
+			"Assets": [
+				"/Game/Assets/Weapon/FPS_Weapon_Bundle/Weapons/Materials/Master_Material/M_Weapon_Master_USE",
+				"/Game/Assets/Weapon/FPS_Weapon_Bundle/Weapons/Materials/SMG11/M_SMG11",
+				"/Game/Assets/Weapon/FPS_Weapon_Bundle/Weapons/Materials/SMG11/M_SMG11_Rem"
+			]
+		},
+		{
+			"ShaderMapHash": "0F15FE392E01C7BF37DCB2502347A3B1056F98E8",
+			"Assets": [
+				"/Game/Assets/FX/RocketTrail/M_TrailSmoke"
+			]
+		},
+		{
+			"ShaderMapHash": "A8266424371106568F0D85E73E56F2B201694641",
+			"Assets": [
+				"/Game/Assets/LearningKit_Games/Assets/Characters/Character/Material/M_EpicCharacter_Optimized"
+			]
+		},
+		{
+			"ShaderMapHash": "7759D7230BC17D2EA30BB359C78670D7E8E35CBF",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/building_materials/M_thatched_roof"
+			]
+		},
+		{
+			"ShaderMapHash": "2E495C15AD68E7B1CC8D6F13556E01385B1C3B0A",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/building_materials/M_block_foundation",
+				"/Game/Assets/Asian_Village/materials/props_materials/M_flag_banner"
+			]
+		},
+		{
+			"ShaderMapHash": "A16B9C3BD57FCA0E0AA59785532B723ECFEA3C5C",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/building_materials/M_wooden_fence"
+			]
+		},
+		{
+			"ShaderMapHash": "ACFCBE7D1D64D6D600D6DD16C79E61E2210A67AF",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/plants_materials/M_grass"
+			]
+		},
+		{
+			"ShaderMapHash": "254463FA00722134729B0B26F6CCC19BFF0F376D",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/props_materials/M_statue"
+			]
+		},
+		{
+			"ShaderMapHash": "03E1EC714C8E18D6E22C9B69A3DED4DFAC810557",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/building_materials/base_materials/M_tiles_WPO"
+			]
+		},
+		{
+			"ShaderMapHash": "E37C60A1B5FAD857A8BBA4AABB9BC33CBC8B96D3",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/decals_materials/M_decal_dirt"
+			]
+		},
+		{
+			"ShaderMapHash": "A7FBC65D76A9DF40176F1686D718DA14A049AC2F",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/building_materials/base_materials/M_concrete"
+			]
+		},
+		{
+			"ShaderMapHash": "030BFF9BD80B61D73D2CBCBF3CFE967C91126A5D",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/water_materials/M_water"
+			]
+		},
+		{
+			"ShaderMapHash": "FDFEBB2299C7F9374B909076C798587B0F2461D4",
+			"Assets": [
+				"/Game/Assets/LearningKit_Games/Assets/Characters/Character/Material/M_EpicCharacter_Dissolve"
+			]
+		},
+		{
+			"ShaderMapHash": "C716BC9579AD04961B65FE4A8B203AC644F4AAAA",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/building_materials/M_building_concrete_WPO"
+			]
+		},
+		{
+			"ShaderMapHash": "CAA8C20A2D5594DB01FE83546EC15E3E5553337E",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/building_materials/base_materials/M_glass"
+			]
+		},
+		{
+			"ShaderMapHash": "0C68AA56B9D3F0D8238C099B35B842A0886F785C",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/building_materials/M_building_metal"
+			]
+		},
+		{
+			"ShaderMapHash": "43B1550FBEC9D8DC7243BC118C5845C9B82DA546",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/plants_materials/M_plants"
+			]
+		},
+		{
+			"ShaderMapHash": "1C58F5FF53C6EE7F19B7BD4DF938B79BF8C6035D",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/building_materials/base_materials/M_wicker_wallpaper"
+			]
+		},
+		{
+			"ShaderMapHash": "1FC66E63F10CE2F54219D7A362B760655F1F6AB0",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/trees_materials/M_foliage_bamboo"
+			]
+		},
+		{
+			"ShaderMapHash": "12C570591B5FD65EF0C8E3BEFEADFE166C383B4B",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/trees_materials/M_foliage"
+			]
+		},
+		{
+			"ShaderMapHash": "68908CDD9CC6E2AE57F5EFE177B74739D61F2A7D",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/water_materials/M_waterfall"
+			]
+		},
+		{
+			"ShaderMapHash": "AA64A73448301E94E39B5A4417A8DA97CD117D2D",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/props_materials/M_lantern",
+				"/Game/Assets/Asian_Village/materials/building_materials/M_door"
+			]
+		},
+		{
+			"ShaderMapHash": "4A8A13EC65D0B1263452BBE2340FC955DC2F43F7",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/building_materials/M_column_decoration"
+			]
+		},
+		{
+			"ShaderMapHash": "707746BD45BBDB1FDB1229205A99EFF9AB4645E2",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/water_materials/M_water_noise"
+			]
+		},
+		{
+			"ShaderMapHash": "CF6BDD3645865A740D7D4115F7DC496723E8A040",
+			"Assets": [
+				"/Engine/EngineMaterials/Widget3DPassThrough_Masked_OneSided"
+			]
+		},
+		{
+			"ShaderMapHash": "EC15E3CA9018F9DDBB0B3AB6F2287D1F3EA290FE",
+			"Assets": [
+				"/Engine/EngineMaterials/Widget3DPassThrough_Opaque_OneSided"
+			]
+		},
+		{
+			"ShaderMapHash": "D3CC9AF4DB0235BDF186F189017287679747B27C",
+			"Assets": [
+				"/Engine/OpenWorldTemplate/LandscapeMaterial/M_ProcGrid"
+			]
+		},
+		{
+			"ShaderMapHash": "125093FAE966BBDC4D9E6E024D6646100CED8D18",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/building_materials/M_building_wood"
+			]
+		},
+		{
+			"ShaderMapHash": "71B333238D3303DE4D88F72D83C30CF0D9B2CC30",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/cliff_materials/M_cliff"
+			]
+		},
+		{
+			"ShaderMapHash": "801C9D681D4255B52F1A013A2179A368D117919E",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/trees_materials/M_bark"
+			]
+		},
+		{
+			"ShaderMapHash": "DB2A9F215B4479D24D8A57FE38827DF40D2852EC",
+			"Assets": [
+				"/Engine/OpenWorldTemplate/LandscapeMaterial/MI_ProcGrid"
+			]
+		},
+		{
+			"ShaderMapHash": "486FD1CF6DEBFC31C28E69956F88AD27C36FD85E",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/building_materials/MI_building_wood_03_Inst"
+			]
+		},
+		{
+			"ShaderMapHash": "0E5B07DBBE70108040D41624AE8ADF8F9FDC9885",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/building_materials/base_materials/M_stone_tiles"
+			]
+		},
+		{
+			"ShaderMapHash": "85F8C54E3DAF69BA628EDE2BCF2EACC89D149E4E",
+			"Assets": [
+				"/Game/Assets/ParagonDekker/FX/Materials/Hero_Specific/M_Dekker_Weapon_Bot"
+			]
+		},
+		{
+			"ShaderMapHash": "AB3AC7B9BF10CD040AB188C231042D346B69B0CD",
+			"Assets": [
+				"/Game/Assets/ParagonDekker/FX/Materials/Hero_Specific/M_Dekker_Weapon_Bot"
+			]
+		},
+		{
+			"ShaderMapHash": "92E6FC7EC5750857FF41ECA172C897B38A66AB82",
+			"Assets": [
+				"/Game/Assets/Asian_Village/materials/landscape_materials/M_landscape_material"
+			]
+		},
+		{
+			"ShaderMapHash": "8C96327E117280AE0BC7DEE4A4241EB05AD7CADE",
+			"Assets": [
+				"/Game/Maps/GameStartupMap",
+				"/Game/Maps/BlasterMap",
+				"/Game/Maps/Lobby"
+			]
+		},
+		{
+			"ShaderMapHash": "235078D10FADD0F2C51386444720F0539D3899EA",
+			"Assets": [
+				"/Game/Maps/GameStartupMap",
+				"/Game/Maps/BlasterMap",
+				"/Game/Maps/Lobby"
+			]
+		},
+		{
+			"ShaderMapHash": "5000CAE66FACDDE6E5F616C7E60B51D9E80B4904",
+			"Assets": [
+				"/Game/Maps/GameStartupMap",
+				"/Game/Maps/BlasterMap",
+				"/Game/Maps/Lobby"
+			]
+		},
+		{
+			"ShaderMapHash": "52241433DC54C999C552996438E67A55BDA40CEC",
+			"Assets": [
+				"/Game/Assets/Materials/PP_Highlight"
+			]
+		},
+		{
+			"ShaderMapHash": "BF68FF26EBFB8E2DBA15F32EEEDF7BA8AF6776B0",
+			"Assets": [
+				"/Game/Assets/sA_PickupSet_1/Materials/M_sA_Aura"
+			]
+		},
+		{
+			"ShaderMapHash": "74291D7F943FC61D822A4871273AFEBF3271463E",
+			"Assets": [
+				"/Game/Assets/sA_PickupSet_1/Materials/M_Master_Fresnel"
+			]
+		},
+		{
+			"ShaderMapHash": "86EAFB37D573983FA0C0DEEF52F1CFFAFFDBCF50",
+			"Assets": [
+				"/Game/Assets/ParagonWraith/FX/Materials/Heroes/Wraith/FX/M_Wraith_Drone_ElectroField"
+			]
+		},
+		{
+			"ShaderMapHash": "F8DC3ED9AB8880B7743C4F560736D58257DA4DED",
+			"Assets": [
+				"/Game/Assets/sA_PickupSet_1/Materials/M_AdditiveScrollNiagara"
+			]
+		},
+		{
+			"ShaderMapHash": "94B7508307243825AF02967874DCCAEB7EAB7A1C",
+			"Assets": [
+				"/Game/Assets/ParagonWraith/FX/Materials/MaterialFunctions/M_Tri_Test"
+			]
+		},
+		{
+			"ShaderMapHash": "C68DE4D6BFCD732C25E7A72705425F6B73E8AEC1",
+			"Assets": [
+				"/Game/Assets/ParagonWraith/FX/Materials/Heroes/Wraith/M_Wraith_Upperbody"
+			]
+		},
+		{
+			"ShaderMapHash": "43B60F37DE8F098B6F88AC56D087DC1BEE0818B7",
+			"Assets": [
+				"/Game/Assets/ParagonWraith/FX/Materials/Heroes/Wraith/M_Wraith_Upperbody"
+			]
+		}
+	]
+}
