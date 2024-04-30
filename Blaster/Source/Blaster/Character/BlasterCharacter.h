@@ -53,6 +53,7 @@ public:
 	bool bIsRunning = false;
 
 	void UpdateHUDHealth();
+	void UpdateHUDShield();
 
 protected:
 	virtual void BeginPlay() override;
@@ -171,6 +172,13 @@ private:
 	UPROPERTY(ReplicatedUsing = OnRep_Health, VisibleAnywhere, Category = "Player Stats")
 	float Health = 100.f;
 	
+	// Player Shield
+	UPROPERTY(EditAnywhere, Category = "Player Stats")
+	float MaxShield = 100.f;
+
+	UPROPERTY(ReplicatedUsing = OnRep_Shield, VisibleAnywhere, Category = "Player Stats")
+	float Shield = 100.f;
+	
 	// Player Speed
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
 	float MaxSpeed = 1800.f;
@@ -186,6 +194,9 @@ private:
 
 	UFUNCTION()
 	void OnRep_Health(float LastHealth);
+
+	UFUNCTION()
+	void OnRep_Shield(float LastShield);
 
 	class ABlasterPlayerController* BlasterPlayerController;
 

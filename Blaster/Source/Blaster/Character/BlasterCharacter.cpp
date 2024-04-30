@@ -93,6 +93,7 @@ void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 	DOREPLIFETIME_CONDITION(ABlasterCharacter, OverlappingWeapon, COND_OwnerOnly);
 	DOREPLIFETIME(ABlasterCharacter, Health);
+	DOREPLIFETIME(ABlasterCharacter, Shield);
 	DOREPLIFETIME(ABlasterCharacter, bDisableGameplay);
 }
 
@@ -101,6 +102,7 @@ void ABlasterCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	UpdateHUDHealth();
+	UpdateHUDShield();
 	
 	// 서버에서 데미지를 받을 때 호출될 함수를 바인드
 	if (HasAuthority())
@@ -119,6 +121,15 @@ void ABlasterCharacter::UpdateHUDHealth()
 	if (BlasterPlayerController)
 	{
 		BlasterPlayerController->SetHUDHealth(Health, MaxHealth);
+	}
+}
+
+void ABlasterCharacter::UpdateHUDShield()
+{
+	BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
+	if (BlasterPlayerController)
+	{
+		BlasterPlayerController->SetHUDShield(Shield, MaxShield);
 	}
 }
 
@@ -143,13 +154,7 @@ void ABlasterCharacter::Tick(float DeltaTime)
 	RotateInPlace(DeltaTime);
 
 	HideCameraIfCharacterClose();
-	PollInit();
-
-	if (GetCharacterMovement())
-	{
-		//UE_LOG(LogTemp, Warning, TEXT("%f"), GetCharacterMovement()->JumpZVelocity);
-	}
-	
+	PollInit();	
 }
 
 void ABlasterCharacter::RotateInPlace(float DeltaTime)
@@ -283,9 +288,24 @@ void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const 
 {
 	if (bElimmed) return;
 
-	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
+	if(Shield > 0.f)
+	{
+		if(Damage >= Shield)
+		{
+			Shield = 0;
+		}
+		else
+		{
+			Shield = Shield - Damage;
+		}
+
+		UpdateHUDShield();
+		return;
+	}
 	
+	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
 	UpdateHUDHealth();
+	
 	PlayHitReactMontage();
 
 	if (Health <= 0.f)
@@ -491,6 +511,11 @@ void ABlasterCharacter::OnRep_Health(float LastHealth)
 	{
 		PlayHitReactMontage();
 	}
+}
+
+void ABlasterCharacter::OnRep_Shield(float LastShield)
+{
+	UpdateHUDShield();
 }
 
 void ABlasterCharacter::AimOffset(float DeltaTime)

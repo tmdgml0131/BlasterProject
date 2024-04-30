@@ -45,6 +45,7 @@ private:
 	void ResetSpeed();
 
 	// Jump
+	FTimerHandle JumpBuffTimer;
 	void ResetJump();
 
 	UPROPERTY(EditAnywhere)
@@ -55,7 +56,7 @@ private:
 
 	
 	UFUNCTION(NetMulticast, Reliable)
-	void MulticastJumpBuff(float MaxJumpValue);
+	void MulticastJumpBuff(float JumpValue);
 
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

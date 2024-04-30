@@ -16,6 +16,7 @@ class BLASTER_API ABlasterPlayerController : public APlayerController
 	
 public:
 	void SetHUDHealth(float Health, float MaxHealth);
+	void SetHUDShield(float Shield, float MaxShield);
 	void SetHUDScore(float Score);
 	void SetHUDDefeats(int32 Defeats);
 	void SetHUDWeaponAmmo(int32 Ammo);
@@ -39,6 +40,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	void SetHUDTime();
+	void InitializeHUD();
 	void PollInit();
 
 	// Sync time between client-server
@@ -88,13 +90,27 @@ private:
 
 	UPROPERTY();
 	class UCharacterOverlay* CharacterOverlay;
-	
-	bool bInitializeCharacterOverlay = false;
 
+	// Health
 	float HUDHealth;
 	float HUDMaxHealth;
+	bool bInitializeHealth = false;
+
+	// Shield
+	float HUDShield;
+	float HUDMaxShield;
+	bool bInitializeShield = false;
+
+	// Score
 	float HUDScore;
+	bool bInitializeScore = false;
+
+	// Death
 	int32 HUDDeath;
+	bool bInitializeDeath = false;
+
+	// Grenade
 	int32 HUDGrenades;
+	bool bInitializeGrenade = false;
 		
 };

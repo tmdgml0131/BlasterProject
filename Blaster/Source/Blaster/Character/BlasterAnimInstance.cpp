@@ -9,6 +9,7 @@
 #include "Blaster/Weapon/Weapon.h"
 #include "Blaster/BlasterTypes/CombatState.h"
 
+
 void UBlasterAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();

@@ -8,7 +8,6 @@
 UBuffComponent::UBuffComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-
 }
 
 void UBuffComponent::BeginPlay()
@@ -77,7 +76,7 @@ void UBuffComponent::BuffJump(float MaxJumpValue, float BuffTime)
 	// 현재 이동속도가 최대보다 크거나 같다면 함수 종료
 	if (!Character || Character->GetCharacterMovement()->JumpZVelocity >= MaxJumpValue) return;
 
-	Character->GetWorldTimerManager().SetTimer(SpeedBuffTimer, this, &ThisClass::ResetJump, BuffTime);
+	Character->GetWorldTimerManager().SetTimer(JumpBuffTimer, this, &ThisClass::ResetJump, BuffTime);
 
 	Character->GetCharacterMovement()->JumpZVelocity = MaxJumpValue;
 
@@ -89,13 +88,14 @@ void UBuffComponent::ResetJump()
 	if (!Character || !Character->GetCharacterMovement()) return;
 
 	Character->GetCharacterMovement()->JumpZVelocity = InitialJumpValue;
+	MulticastJumpBuff(InitialJumpValue);
 }
 
-void UBuffComponent::MulticastJumpBuff_Implementation(float MaxJumpValue)
+void UBuffComponent::MulticastJumpBuff_Implementation(float JumpValue)
 {
 	if (!Character) return;
 
-	Character->GetCharacterMovement()->JumpZVelocity = MaxJumpValue;
+	Character->GetCharacterMovement()->JumpZVelocity = JumpValue;
 }
 
 void UBuffComponent::HealRampUp(float DeltaTime)

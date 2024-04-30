@@ -107,9 +107,29 @@ void ABlasterPlayerController::SetHUDHealth(float Health, float MaxHealth)
 	}
 	else
 	{
-		bInitializeCharacterOverlay = true;
+		bInitializeHealth = true;
 		HUDHealth = Health;
 		HUDMaxHealth = MaxHealth;
+	}
+}
+
+void ABlasterPlayerController::SetHUDShield(float Shield, float MaxShield)
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+
+	bool bHUDValid = BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->CharacterOverlay->ShieldBar && BlasterHUD->CharacterOverlay->ShieldText;
+	if (bHUDValid)
+	{
+		const float ShieldPercent = Shield / MaxShield;
+		BlasterHUD->CharacterOverlay->ShieldBar->SetPercent(ShieldPercent);
+		FString ShieldText = FString::Printf(TEXT("%d/%d"), FMath::CeilToInt(Shield), FMath::CeilToInt(MaxShield));
+		BlasterHUD->CharacterOverlay->ShieldText->SetText(FText::FromString(ShieldText));
+	}
+	else
+	{
+		bInitializeShield = true;
+		HUDShield = Shield;
+		HUDMaxShield = MaxShield;
 	}
 }
 
@@ -125,7 +145,7 @@ void ABlasterPlayerController::SetHUDScore(float Score)
 	}
 	else
 	{
-		bInitializeCharacterOverlay = true;
+		bInitializeScore = true;
 		HUDScore = Score;
 	}
 }
@@ -142,7 +162,7 @@ void ABlasterPlayerController::SetHUDDefeats(int32 Defeats)
 	}
 	else
 	{
-		bInitializeCharacterOverlay = true;
+		bInitializeDeath = true;
 		HUDDeath = Defeats;
 	}
 }
@@ -228,6 +248,7 @@ void ABlasterPlayerController::SetHUDGrenades(int32 Grenades)
 	}
 	else
 	{
+		bInitializeGrenade = true;
 		HUDGrenades = Grenades;
 	}
 }
@@ -274,18 +295,39 @@ void ABlasterPlayerController::PollInit()
 			CharacterOverlay = BlasterHUD->CharacterOverlay;
 			if (CharacterOverlay)
 			{
-				SetHUDHealth(HUDHealth, HUDHealth);
-				SetHUDScore(HUDScore);
-				SetHUDDefeats(HUDDeath);
+				InitializeHUD();
 
 				ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn());
-				if (BlasterCharacter && BlasterCharacter->GetCombatComponent())
+				if (BlasterCharacter && bInitializeGrenade && BlasterCharacter->GetCombatComponent())
 				{
 					SetHUDGrenades(BlasterCharacter->GetCombatComponent()->GetGrenades());
 				}
 
 			}
 		}
+	}
+}
+
+void ABlasterPlayerController::InitializeHUD()
+{
+	if(bInitializeHealth)
+	{
+		SetHUDHealth(HUDHealth, HUDMaxHealth);
+	}
+
+	if(bInitializeShield)
+	{
+		SetHUDShield(HUDShield, HUDMaxShield);
+	}
+
+	if(bInitializeScore)
+	{
+		SetHUDScore(HUDScore);
+	}
+
+	if(bInitializeDeath)
+	{
+		SetHUDDefeats(HUDDeath);
 	}
 }
 
