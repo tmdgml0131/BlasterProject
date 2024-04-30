@@ -88,7 +88,7 @@ ABlasterCharacter::ABlasterCharacter()
 
 // Replicated 설정한 변수들을 등록합니다
 void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
+{ 
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME_CONDITION(ABlasterCharacter, OverlappingWeapon, COND_OwnerOnly);
@@ -144,6 +144,12 @@ void ABlasterCharacter::Tick(float DeltaTime)
 
 	HideCameraIfCharacterClose();
 	PollInit();
+
+	if (GetCharacterMovement())
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("%f"), GetCharacterMovement()->JumpZVelocity);
+	}
+	
 }
 
 void ABlasterCharacter::RotateInPlace(float DeltaTime)

@@ -29,8 +29,8 @@ void UBuffComponent::Heal(float HealAmount, float HealingTime)
 
 void UBuffComponent::BuffSpeed(float BuffSpeed, float BuffTime)
 {
-	// ���� �̵��ӵ��� �ִ뺸�� ũ�ų� ���ٸ� �Լ� ����
-	if (!Character || Character->GetCharacterMovement()->MaxWalkSpeed >= Character->GetCharacterMaxSpeed()) return;
+	// 현재 이동속도가 최대보다 크거나 같다면 함수 종료
+	if (!Character || Character->GetCharacterMovement()->MaxWalkSpeed >= Character->GetCharacterMaxSpeed()) return;      
 
 	Character->GetWorldTimerManager().SetTimer(SpeedBuffTimer, this, &ThisClass::ResetSpeed, BuffTime);
 
@@ -70,6 +70,32 @@ void UBuffComponent::MulticastSpeedBuff_Implementation(float WalkSpeed, float Ru
 	{
 		Character->GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
 	}
+}
+
+void UBuffComponent::BuffJump(float MaxJumpValue, float BuffTime)
+{
+	// 현재 이동속도가 최대보다 크거나 같다면 함수 종료
+	if (!Character || Character->GetCharacterMovement()->JumpZVelocity >= MaxJumpValue) return;
+
+	Character->GetWorldTimerManager().SetTimer(SpeedBuffTimer, this, &ThisClass::ResetJump, BuffTime);
+
+	Character->GetCharacterMovement()->JumpZVelocity = MaxJumpValue;
+
+	MulticastJumpBuff(MaxJumpValue);
+}
+
+void UBuffComponent::ResetJump()
+{
+	if (!Character || !Character->GetCharacterMovement()) return;
+
+	Character->GetCharacterMovement()->JumpZVelocity = InitialJumpValue;
+}
+
+void UBuffComponent::MulticastJumpBuff_Implementation(float MaxJumpValue)
+{
+	if (!Character) return;
+
+	Character->GetCharacterMovement()->JumpZVelocity = MaxJumpValue;
 }
 
 void UBuffComponent::HealRampUp(float DeltaTime)

@@ -16,15 +16,18 @@ public:
 	UBuffComponent();
 	friend class ABlasterCharacter;
 
-	// Heal Flag ø√∑¡¡÷∞Ì Heal ∑Æ ∞ËªÍ
+	// Heal Flag Ïò¨Î†§Ï£ºÍ≥† Heal Îüâ Í≥ÑÏÇ∞
 	void Heal(float HealAmount, float HealingTime);
 
 	// Speed 
 	void BuffSpeed(float BuffSpeed, float BuffTime);
+
+	// Jump
+	void BuffJump(float MaxJumpValue, float BuffTime);
 protected:
 	virtual void BeginPlay() override;
 
-	// Ω«¡¶ Heal √≥∏Æ «‘ºˆ, Flag On Ω√, Tick ø°º≠ µ∑¥Ÿ
+	// Ïã§Ï†ú Heal Ï≤òÎ¶¨ Ìï®Ïàò, Flag On Ïãú, Tick ÏóêÏÑú ÎèàÎã§
 	void HealRampUp(float DeltaTime);
 
 private:
@@ -41,8 +44,18 @@ private:
 	float InitialSpeed = 0.f;
 	void ResetSpeed();
 
+	// Jump
+	void ResetJump();
+
+	UPROPERTY(EditAnywhere)
+	float InitialJumpValue = 1600.f;
+
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastSpeedBuff(float WalkSpeed, float RunSpeed);
+
+	
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastJumpBuff(float MaxJumpValue);
 
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

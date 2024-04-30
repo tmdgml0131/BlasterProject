@@ -11,5 +11,5 @@ public class BlasterTarget : TargetRules
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_1;
 		ExtraModuleNames.Add("Blaster");
-	}
+    }
 }

@@ -130,7 +130,7 @@ private:
 	float InterpAO_Yaw;
 	float AO_Pitch;
 	FRotator StartingAimRotation;
-
+	
 	ETurningInPlace TurningInPlace;
 	void TurnInPlace(float DeltaTime);
 
@@ -243,7 +243,7 @@ public:
 	AWeapon* GetEquippedWeapon();
 	FVector GetHitTarget() const;
 	ECombatState GetCombatState() const;
-
+	
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
 	FORCEINLINE bool ShouldRotateRootBone() const { return bRotateRootBone; }
