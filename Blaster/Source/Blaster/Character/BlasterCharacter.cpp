@@ -22,6 +22,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Blaster/PlayerState/BlasterPlayerState.h"
 #include "Blaster/Weapon/WeaponTypes.h"
+#include "Elements/SMInstance/SMInstanceElementEditorSelectionInterface.h"
 
 ABlasterCharacter::ABlasterCharacter()
 {
@@ -100,8 +101,9 @@ void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 void ABlasterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	UpdateHUDHealth();
+	
 	UpdateHUDShield();
 	
 	// 서버에서 데미지를 받을 때 호출될 함수를 바인드
@@ -125,7 +127,7 @@ void ABlasterCharacter::UpdateHUDHealth()
 }
 
 void ABlasterCharacter::UpdateHUDShield()
-{
+{	
 	BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
 	if (BlasterPlayerController)
 	{
@@ -154,7 +156,7 @@ void ABlasterCharacter::Tick(float DeltaTime)
 	RotateInPlace(DeltaTime);
 
 	HideCameraIfCharacterClose();
-	PollInit();	
+	PollInit();
 }
 
 void ABlasterCharacter::RotateInPlace(float DeltaTime)
@@ -804,7 +806,7 @@ void ABlasterCharacter::StartDissolve()
 void ABlasterCharacter::HideCameraIfCharacterClose()
 {
 	if (!IsLocallyControlled()) return;
-
+	
 	if ((FollowCamera->GetComponentLocation() - GetActorLocation()).Size() < CameraTreshold)
 	{
 		GetMesh()->SetVisibility(false);

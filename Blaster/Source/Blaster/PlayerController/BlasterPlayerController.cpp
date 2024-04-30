@@ -90,6 +90,7 @@ void ABlasterPlayerController::OnPossess(APawn* InPawn)
 	if (BlasterCharacter)
 	{
 		SetHUDHealth(BlasterCharacter->GetHealth(), BlasterCharacter->GetMaxHealth());
+		SetHUDShield(BlasterCharacter->GetShield(), BlasterCharacter->GetMaxShield());
 	}
 }
 
@@ -296,7 +297,7 @@ void ABlasterPlayerController::PollInit()
 			if (CharacterOverlay)
 			{
 				InitializeHUD();
-
+				
 				ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn());
 				if (BlasterCharacter && bInitializeGrenade && BlasterCharacter->GetCombatComponent())
 				{
