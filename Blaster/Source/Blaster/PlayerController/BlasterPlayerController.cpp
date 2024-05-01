@@ -91,7 +91,6 @@ void ABlasterPlayerController::OnPossess(APawn* InPawn)
 	{
 		SetHUDHealth(BlasterCharacter->GetHealth(), BlasterCharacter->GetMaxHealth());
 		SetHUDShield(BlasterCharacter->GetShield(), BlasterCharacter->GetMaxShield());
-		UE_LOG(LogTemp, Warning, TEXT("Rider IDE Branch Test"));
 	}
 }
 
