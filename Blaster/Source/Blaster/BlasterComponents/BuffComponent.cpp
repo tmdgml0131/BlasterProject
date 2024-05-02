@@ -26,6 +26,23 @@ void UBuffComponent::Heal(float HealAmount, float HealingTime)
 	AmountToHeal += HealAmount;
 }
 
+void UBuffComponent::HealRampUp(float DeltaTime)
+{
+	if (!bHealing || !Character || Character->IsElimmed()) return;
+
+	const float HealThisFrame = HealingRate * DeltaTime;
+	Character->SetHealth(FMath::Clamp(Character->GetHealth() + HealThisFrame, 0.f, Character->GetMaxHealth()));
+	Character->UpdateHUDHealth();
+
+	AmountToHeal -= HealThisFrame;
+
+	if (AmountToHeal <= 0.f || Character->GetHealth() >= Character->GetMaxHealth())
+	{
+		bHealing = false;
+		AmountToHeal = 0.f;
+	}
+}
+
 void UBuffComponent::BuffSpeed(float BuffSpeed, float BuffTime)
 {
 	// 현재 이동속도가 최대보다 크거나 같다면 함수 종료
@@ -98,23 +115,13 @@ void UBuffComponent::MulticastJumpBuff_Implementation(float JumpValue)
 	Character->GetCharacterMovement()->JumpZVelocity = JumpValue;
 }
 
-void UBuffComponent::HealRampUp(float DeltaTime)
+void UBuffComponent::Shield(float ShieldAmount)
 {
-	if (!bHealing || !Character || Character->IsElimmed()) return;
+	if (!Character || Character->IsElimmed()) return;
 
-	const float HealThisFrame = HealingRate * DeltaTime;
-	Character->SetHealth(FMath::Clamp(Character->GetHealth() + HealThisFrame, 0.f, Character->GetMaxHealth()));
-	Character->UpdateHUDHealth();
-
-	AmountToHeal -= HealThisFrame;
-
-	if (AmountToHeal <= 0.f || Character->GetHealth() >= Character->GetMaxHealth())
-	{
-		bHealing = false;
-		AmountToHeal = 0.f;
-	}
+	Character->SetShield(FMath::Clamp(ShieldAmount, 0.f, Character->GetMaxShield()));
+	Character->UpdateHUDShield();
 }
-
 
 void UBuffComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {

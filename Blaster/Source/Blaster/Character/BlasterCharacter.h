@@ -176,8 +176,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
 	float MaxShield = 100.f;
 
-	UPROPERTY(ReplicatedUsing = OnRep_Shield, VisibleAnywhere, Category = "Player Stats")
-	float Shield = 100.f;
+	UPROPERTY(ReplicatedUsing = OnRep_Shield, EditAnywhere, Category = "Player Stats")
+	float Shield = 0.f;
 	
 	// Player Speed
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
@@ -264,6 +264,7 @@ public:
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
 	FORCEINLINE float GetShield() const { return Shield; }
 	FORCEINLINE float GetMaxShield() const { return MaxShield; }
+	FORCEINLINE void SetShield(float ShieldAmount) { Shield = ShieldAmount; }
 	FORCEINLINE bool GetDisableGameplay() const { return bDisableGameplay; }
 	FORCEINLINE float GetCharacterWalkSpeed() const { return WalkSpeed; }
 	FORCEINLINE float GetCharacterRunSpeed() const { return RunSpeed; }
