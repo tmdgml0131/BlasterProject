@@ -24,6 +24,9 @@ public:
 
 	// Jump
 	void BuffJump(float MaxJumpValue, float BuffTime);
+
+	// Shield
+	void Shield(float ShieldAmount);
 protected:
 	virtual void BeginPlay() override;
 

@@ -5,6 +5,8 @@
 #include "GameFramework/PlayerController.h"
 #include "CharacterOverlay.h"
 #include "Announcement.h"
+#include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
 
 void ABlasterHUD::BeginPlay()
 {
@@ -31,6 +33,18 @@ void ABlasterHUD::AddAnnouncement()
 		Announcement = CreateWidget<UAnnouncement>(PlayerController, AnnouncementClass);
 		Announcement->AddToViewport();
 	}
+}
+
+void ABlasterHUD::ShowShield()
+{
+	CharacterOverlay->ShieldBar->SetVisibility(ESlateVisibility::Visible);
+	CharacterOverlay->ShieldText->SetVisibility(ESlateVisibility::Visible);
+}
+
+void ABlasterHUD::HideShield()
+{
+	CharacterOverlay->ShieldBar->SetVisibility(ESlateVisibility::Hidden);
+	CharacterOverlay->ShieldText->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void ABlasterHUD::DrawHUD()
