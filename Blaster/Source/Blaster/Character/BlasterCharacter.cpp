@@ -101,9 +101,11 @@ void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 void ABlasterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SpawnDefaultWeapon();
+	UpdateHUDAmmo();
 	
 	UpdateHUDHealth();
-	
 	UpdateHUDShield();
 	
 	// 서버에서 데미지를 받을 때 호출될 함수를 바인드
@@ -132,6 +134,33 @@ void ABlasterCharacter::UpdateHUDShield()
 	if (BlasterPlayerController)
 	{
 		BlasterPlayerController->SetHUDShield(Shield, MaxShield);
+	}
+}
+
+void ABlasterCharacter::UpdateHUDAmmo()
+{
+	BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
+	if (BlasterPlayerController && CombatComponent && CombatComponent->EquippedWeapon)
+	{
+		BlasterPlayerController->SetHUDCarriedAmmo(CombatComponent->CarriedAmmo);
+		BlasterPlayerController->SetHUDWeaponAmmo(CombatComponent->EquippedWeapon->GetAmmo());
+	}
+}
+
+void ABlasterCharacter::SpawnDefaultWeapon()
+{
+	ABlasterGameMode* BlasterGameMode = Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this));	// nullptr if not on the server
+	UWorld* World = GetWorld();
+	
+	if(BlasterGameMode && World && !bElimmed && DefaultWeaponClass)
+	{
+		AWeapon* StartingWeapon = World->SpawnActor<AWeapon>(DefaultWeaponClass);
+		StartingWeapon->bDestroyWeapon = true;	// Default Weapon should be destroyed not dropped
+		
+		if(CombatComponent)
+		{
+			CombatComponent->EquipWeapon(StartingWeapon);
+		}
 	}
 }
 
@@ -695,7 +724,14 @@ void ABlasterCharacter::Elim()
 {
 	if (CombatComponent && CombatComponent->EquippedWeapon)
 	{
-		CombatComponent->EquippedWeapon->Dropped(); 
+		if(CombatComponent->EquippedWeapon->bDestroyWeapon) // Default Weapon 인 경우
+		{
+			CombatComponent->EquippedWeapon->Destroy();
+		}
+		else // Default Weapon 아닌 경우
+		{
+			CombatComponent->EquippedWeapon->Dropped(); 
+		}
 	}
 	MulticastElim();
 	GetWorldTimerManager().SetTimer(ElimTimer, this, &ThisClass::ElimTimerFinished, ElimDealy);
