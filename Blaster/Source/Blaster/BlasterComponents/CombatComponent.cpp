@@ -305,6 +305,13 @@ void UCombatComponent::EquipWeapon(class AWeapon* WeaponToEquip)
 
 void UCombatComponent::DropEquippedWeapon()
 {
+	// DefaultWeapon Should be Destroyed not dropped
+	if(EquippedWeapon && EquippedWeapon->bDestroyWeapon)
+	{
+		EquippedWeapon->Destroy();
+		return;
+	}
+	
 	if (EquippedWeapon)
 	{
 		EquippedWeapon->Dropped();

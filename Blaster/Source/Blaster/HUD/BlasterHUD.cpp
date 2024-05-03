@@ -35,13 +35,13 @@ void ABlasterHUD::AddAnnouncement()
 	}
 }
 
-void ABlasterHUD::ShowShield()
+void ABlasterHUD::ShowShieldUI()
 {
 	CharacterOverlay->ShieldBar->SetVisibility(ESlateVisibility::Visible);
 	CharacterOverlay->ShieldText->SetVisibility(ESlateVisibility::Visible);
 }
 
-void ABlasterHUD::HideShield()
+void ABlasterHUD::HideShieldUI()
 {
 	CharacterOverlay->ShieldBar->SetVisibility(ESlateVisibility::Hidden);
 	CharacterOverlay->ShieldText->SetVisibility(ESlateVisibility::Hidden);

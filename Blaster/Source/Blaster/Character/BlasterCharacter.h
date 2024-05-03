@@ -54,7 +54,8 @@ public:
 
 	void UpdateHUDHealth();
 	void UpdateHUDShield();
-
+	void UpdateHUDAmmo();
+	void SpawnDefaultWeapon();
 protected:
 	virtual void BeginPlay() override;
 
@@ -93,6 +94,7 @@ protected:
 	void PollInit();
 
 	void RotateInPlace(float DeltaTime);
+	
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
 	class USpringArmComponent* CameraBoom;
@@ -247,6 +249,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* AttachedGrenade;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AWeapon> DefaultWeaponClass;
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();

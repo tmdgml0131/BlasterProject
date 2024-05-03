@@ -50,8 +50,8 @@ public:
 
 	void AddAnnouncement();
 
-	void ShowShield();
-	void HideShield();
+	void ShowShieldUI();
+	void HideShieldUI();
 
 protected:
 	virtual void BeginPlay() override;

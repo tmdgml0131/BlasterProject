@@ -123,11 +123,11 @@ void ABlasterPlayerController::SetHUDShield(float Shield, float MaxShield)
 	{
 		if(Shield > 0.f)
 		{
-			BlasterHUD->ShowShield();
+			BlasterHUD->ShowShieldUI();
 		}
 		else
 		{
-			BlasterHUD->HideShield();
+			BlasterHUD->HideShieldUI();
 		}
 		
 		const float ShieldPercent = Shield / MaxShield;
@@ -187,6 +187,11 @@ void ABlasterPlayerController::SetHUDWeaponAmmo(int32 Ammo)
 		FString AmmoText = FString::Printf(TEXT("%d"), Ammo);
 		BlasterHUD->CharacterOverlay->WeaponAmmoAmount->SetText(FText::FromString(AmmoText));
 	}
+	else
+	{
+		bInitializeWeaponAmmo = true;
+		HUDWeaponAmmo = Ammo;
+	}
 }
 
 void ABlasterPlayerController::SetHUDCarriedAmmo(int32 Ammo)
@@ -198,6 +203,11 @@ void ABlasterPlayerController::SetHUDCarriedAmmo(int32 Ammo)
 	{
 		FString CarriedAmmoText = FString::Printf(TEXT("%d"), Ammo);
 		BlasterHUD->CharacterOverlay->CarriedAmmoAmount->SetText(FText::FromString(CarriedAmmoText));
+	}
+	else
+	{
+		bInitializeCarriedAmmo = true;
+		HUDCarriedAmmo = Ammo;
 	}
 }
 
@@ -338,6 +348,16 @@ void ABlasterPlayerController::InitializeHUD()
 	if(bInitializeDeath)
 	{
 		SetHUDDefeats(HUDDeath);
+	}
+
+	if(bInitializeCarriedAmmo)
+	{
+		SetHUDCarriedAmmo(HUDCarriedAmmo);
+	}
+
+	if(bInitializeWeaponAmmo)
+	{
+		SetHUDWeaponAmmo(HUDWeaponAmmo);
 	}
 }
 

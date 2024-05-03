@@ -12,15 +12,31 @@ class BLASTER_API APickupSpawnPoint : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	APickupSpawnPoint();
 
+	virtual void Tick(float DeltaTime) override;
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere)
+	TArray<TSubclassOf<class APickup>> PickupClasses;
+
+	UPROPERTY()
+	APickup* SpawnedPickup;
+
+	void SpawnPickup();
+
+	UFUNCTION()
+	void StartSpawnPickupTimer(AActor* DestroyedActor);
+	
+	void SpawnPickupTimerFinished();
+private:
+	FTimerHandle SpawnPickupTimer;
+
+	UPROPERTY(EditAnywhere)
+	float SpawnPickupTimeMin = 5.f;
+
+	UPROPERTY(EditAnywhere)
+	float SpawnPickupTimeMax = 30.f;
 
 };
