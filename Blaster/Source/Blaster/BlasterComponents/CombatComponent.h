@@ -75,6 +75,9 @@ protected:
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
 
+	UFUNCTION()
+	void OnRep_SecondaryWeapon();
+
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
 	void SetHUDCrosshairs(float DeltaTime);
@@ -91,14 +94,18 @@ protected:
 
 	void AttachActorToLeftHand(AActor* ActorToAttach);
 	void AttachActorToRightHand(AActor* ActorToAttach);
+	void AttachActorToBackpack(AActor* ActorToAttach);
 
 	void UpdateCarriedAmmo();
 
-	void PlayEquipWeaponSound();
+	void PlayEquipWeaponSound(AWeapon* WeaponToEquip);
 
 	void ReloadEmptyWeapon();
 
 	void ShowAttachedGrenade(bool bShow);
+
+	void EquipPrimaryWeapon(AWeapon* WeaponToEquip);
+	void EquipSecondaryWeapon(AWeapon* WeaponToEquip);
 private:
 	UPROPERTY()
 	class ABlasterCharacter* Character;
@@ -111,6 +118,9 @@ private:
 
 	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
 	AWeapon* EquippedWeapon;
+
+	UPROPERTY(ReplicatedUsing = OnRep_SecondaryWeapon)
+	AWeapon* SecondaryWeapon;
 	
 	UPROPERTY(Replicated)
 	bool bAiming;
