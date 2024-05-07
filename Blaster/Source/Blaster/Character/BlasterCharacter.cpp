@@ -713,6 +713,7 @@ void ABlasterCharacter::OnRep_ReplicatedMovement()
 
 void ABlasterCharacter::Elim()
 {
+	// Primary Weapon
 	if (CombatComponent && CombatComponent->EquippedWeapon)
 	{
 		if(CombatComponent->EquippedWeapon->bDestroyWeapon) // Default Weapon 인 경우
@@ -721,9 +722,23 @@ void ABlasterCharacter::Elim()
 		}
 		else // Default Weapon 아닌 경우
 		{
-			CombatComponent->EquippedWeapon->Dropped(); 
+			CombatComponent->EquippedWeapon->Dropped();
 		}
 	}
+
+	// Secondary Weapon
+	if(CombatComponent && CombatComponent->SecondaryWeapon)
+	{
+		if(CombatComponent->SecondaryWeapon->bDestroyWeapon)
+		{
+			CombatComponent->SecondaryWeapon->Destroy();
+		}
+		else
+		{
+			CombatComponent->SecondaryWeapon->Dropped();
+		}
+	}
+	
 	MulticastElim();
 	GetWorldTimerManager().SetTimer(ElimTimer, this, &ThisClass::ElimTimerFinished, ElimDealy);
 }
