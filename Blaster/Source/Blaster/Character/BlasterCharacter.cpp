@@ -183,7 +183,7 @@ void ABlasterCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	RotateInPlace(DeltaTime);
-
+	
 	HideCameraIfCharacterClose();
 	PollInit();
 }
@@ -470,16 +470,7 @@ void ABlasterCharacter::EquipButtonPressed()
 
 	if (CombatComponent)
 	{
-		// Equip 요청이 서버인 경우
-		if (HasAuthority())
-		{
-			CombatComponent->EquipWeapon(OverlappingWeapon);
-		}
-		// Equip 요청이 Client 인경우
-		else
-		{
-			ServerEquipButtonPressed();
-		}
+		ServerEquipButtonPressed();
 	}
 }
 
@@ -866,7 +857,14 @@ void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 {
 	if (CombatComponent)
 	{
-		CombatComponent->EquipWeapon(OverlappingWeapon);
+		if(OverlappingWeapon)
+		{
+			CombatComponent->EquipWeapon(OverlappingWeapon);
+		}
+		else if(CombatComponent->ShouldSwapWeapon())
+		{
+			CombatComponent->SwapWeapon();
+		}
 	}
 }
 
