@@ -24,6 +24,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	void EquipWeapon(class AWeapon* WeaponToEquip);
+	void SwapWeapon();
 
 	void Reload();
 
@@ -222,7 +223,9 @@ private:
 
 	void UpdateHUDGrenades();
 
+	class UCameraComponent* FollowCamera;
 public:
 	FORCEINLINE int32 GetGrenades() const { return Grenades; }
+	bool ShouldSwapWeapon();
 
 };

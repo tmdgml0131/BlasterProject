@@ -41,7 +41,7 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 void UCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	InitializeComponentSettings();
 }
 
@@ -52,12 +52,18 @@ void UCombatComponent::InitializeComponentSettings()
 	{
 		Character->GetCharacterMovement()->MaxWalkSpeed = Character->GetCharacterWalkSpeed();
 
-		if (Character->GetFollowCamera())
+		FollowCamera = Character->GetFollowCamera();
+		if (FollowCamera)
 		{
-			DefaultFOV = Character->GetFollowCamera()->FieldOfView;
+			DefaultFOV = FollowCamera->FieldOfView;
 			CurrentFOV = DefaultFOV;
 		}
 
+		// Set Camera Pitch limit to -75.f ~ 75.f due to Aim animation issue
+		APlayerCameraManager* PlayerCameraManager = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
+		PlayerCameraManager->ViewPitchMin = -75.f;
+		PlayerCameraManager->ViewPitchMax = 75.f;
+		
 		if (Character->HasAuthority())
 		{
 			InitializeCarriedAmmo();
@@ -68,7 +74,7 @@ void UCombatComponent::InitializeComponentSettings()
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	
 	UpdateHUDCrosshairs(DeltaTime);
 }
 
@@ -100,6 +106,11 @@ void UCombatComponent::UpdateHUDGrenades()
 	{
 		Controller->SetHUDGrenades(Grenades);
 	}
+}
+
+bool UCombatComponent::ShouldSwapWeapon()
+{
+	return EquippedWeapon && SecondaryWeapon;
 }
 
 // 발사 버튼 입력 처리: 발사 버튼의 상태에 따라 발사 또는 중지
@@ -297,9 +308,28 @@ void UCombatComponent::EquipWeapon(class AWeapon* WeaponToEquip)
 	Character->bUseControllerRotationYaw = true;
 }
 
+void UCombatComponent::SwapWeapon()
+{
+	AWeapon* TempWeapon = EquippedWeapon;
+	EquippedWeapon = SecondaryWeapon;
+	SecondaryWeapon = TempWeapon;
+	
+	EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
+	SecondaryWeapon->SetWeaponState(EWeaponState::EWS_EquippedSecondary);
+	
+	AttachActorToBackpack(SecondaryWeapon);
+	AttachActorToRightHand(EquippedWeapon);
+	
+	EquippedWeapon->SetHUDAmmo();
+	UpdateCarriedAmmo();
+	
+	PlayEquipWeaponSound(EquippedWeapon);
+}
 
 void UCombatComponent::EquipPrimaryWeapon(AWeapon* WeaponToEquip)
 {
+	if (WeaponToEquip == nullptr) return;
+	
 	DropEquippedWeapon();
 
 	EquippedWeapon = WeaponToEquip;
@@ -309,21 +339,22 @@ void UCombatComponent::EquipPrimaryWeapon(AWeapon* WeaponToEquip)
 
 	EquippedWeapon->SetOwner(Character);
 	EquippedWeapon->SetHUDAmmo();
-
 	UpdateCarriedAmmo();
 
-	PlayEquipWeaponSound(EquippedWeapon);
+	PlayEquipWeaponSound(WeaponToEquip);
 
 	ReloadEmptyWeapon();
 }
 
 void UCombatComponent::EquipSecondaryWeapon(AWeapon* WeaponToEquip)
 {
+	if (WeaponToEquip == nullptr) return;
+	
 	SecondaryWeapon = WeaponToEquip;
-	SecondaryWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
-	EquippedWeapon->SetOwner(Character);
-	PlayEquipWeaponSound(SecondaryWeapon);
+	SecondaryWeapon->SetWeaponState(EWeaponState::EWS_EquippedSecondary);
+	PlayEquipWeaponSound(WeaponToEquip);
 	AttachActorToBackpack(WeaponToEquip);
+	SecondaryWeapon->SetOwner(Character);
 }
 
 void UCombatComponent::DropEquippedWeapon()
@@ -573,13 +604,15 @@ void UCombatComponent::OnRep_EquippedWeapon()
 	if (EquippedWeapon && Character)
 	{
 		EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
-
+		
 		AttachActorToRightHand(EquippedWeapon);
 
 		Character->GetCharacterMovement()->bOrientRotationToMovement = false;
 		Character->bUseControllerRotationYaw = true;
 
 		PlayEquipWeaponSound(EquippedWeapon);
+		
+		EquippedWeapon->SetHUDAmmo();
 	}
 }
 
@@ -587,10 +620,10 @@ void UCombatComponent::OnRep_SecondaryWeapon()
 {
 	if (SecondaryWeapon && Character)
 	{
-		SecondaryWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
+		SecondaryWeapon->SetWeaponState(EWeaponState::EWS_EquippedSecondary);
 
 		AttachActorToBackpack(SecondaryWeapon);
-		PlayEquipWeaponSound(SecondaryWeapon);
+		PlayEquipWeaponSound(EquippedWeapon);
 	}
 }
 
@@ -765,9 +798,9 @@ void UCombatComponent::InterpFOV(float DeltaTime)
 		CurrentFOV = FMath::FInterpTo(CurrentFOV, DefaultFOV, DeltaTime, ZoomInterpSpeed);
 	}
 
-	if (Character && Character->GetFollowCamera())
+	if (Character && FollowCamera)
 	{
-		Character->GetFollowCamera()->SetFieldOfView(CurrentFOV);
+		FollowCamera->SetFieldOfView(CurrentFOV);
 	}
 }
 
