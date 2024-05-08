@@ -61,8 +61,11 @@ void UCombatComponent::InitializeComponentSettings()
 
 		// Set Camera Pitch limit to -75.f ~ 75.f due to Aim animation issue
 		APlayerCameraManager* PlayerCameraManager = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
-		PlayerCameraManager->ViewPitchMin = -75.f;
-		PlayerCameraManager->ViewPitchMax = 75.f;
+		if(PlayerCameraManager)
+		{
+			PlayerCameraManager->ViewPitchMin = -75.f;
+			PlayerCameraManager->ViewPitchMax = 75.f;
+		}
 		
 		if (Character->HasAuthority())
 		{

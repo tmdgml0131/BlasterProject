@@ -14,13 +14,15 @@
 #include "Blaster/BlasterComponents/CombatComponent.h"
 #include "Blaster/GameState/BlasterGameState.h"
 #include "Blaster/PlayerState/BlasterPlayerState.h"
+#include "Components/Image.h"
 
 void ABlasterPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
 	BlasterHUD = Cast<ABlasterHUD>(GetHUD());
 	ServerCheckMatchState();
+
+	StartHighPingWarning();
 }
 
 void ABlasterPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -28,6 +30,46 @@ void ABlasterPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ABlasterPlayerController, MatchState);
+}
+
+void ABlasterPlayerController::CheckPing(float Deltatime)
+{
+	// Lag Test Run
+	// DefaultEngine.ini 를 열고 하단에
+	// [PacketSimulationSettings]
+	// PktLag = 100
+	// 추가하여 임의로 Lag을 줄 수 있다.
+	
+	HighPingRunningTime += Deltatime;
+	if(HighPingRunningTime >= CheckPingFrequency)
+	{
+		PlayerState = PlayerState == nullptr ? GetPlayerState<APlayerState>() : PlayerState;
+		if(PlayerState)
+		{
+			// UE Getping은 실제 핑의 1/4 만 압축 되어전송, 따라서 *4 해줘야 실제 Ping이 나옴
+			if(PlayerState->GetPing() * 4 > HighPingTreshhold)
+			{
+				StartHighPingWarning();
+				PingAnimationRunningTime = 0.f;
+			}
+		}
+		HighPingRunningTime = 0.f;
+	}
+	
+	bool bHighAnimationPlaying =
+		BlasterHUD
+		&& BlasterHUD->CharacterOverlay
+		&& BlasterHUD->CharacterOverlay->HighPingAnimation
+		&& BlasterHUD->CharacterOverlay->IsAnimationPlaying(BlasterHUD->CharacterOverlay->HighPingAnimation);
+	
+	if(bHighAnimationPlaying)
+	{
+		PingAnimationRunningTime += Deltatime;
+		if(PingAnimationRunningTime >= HighPingWarningDuration)
+		{
+			StopHighPingWarning();
+		}
+	}
 }
 
 void ABlasterPlayerController::Tick(float Deltatime)
@@ -39,6 +81,8 @@ void ABlasterPlayerController::Tick(float Deltatime)
 	CheckTimeSync(Deltatime);
 
 	PollInit();
+
+	CheckPing(Deltatime);
 }
 
 void ABlasterPlayerController::CheckTimeSync(float DeltaTime)
@@ -48,6 +92,33 @@ void ABlasterPlayerController::CheckTimeSync(float DeltaTime)
 	{
 		ServerRequestServerTime(GetWorld()->GetTimeSeconds());
 		TimeSyncRunningTime = 0.f;
+	}
+}
+
+void ABlasterPlayerController::StartHighPingWarning()
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+
+	bool bHUDValid = BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->CharacterOverlay->HighPingImage && BlasterHUD->CharacterOverlay->HighPingAnimation;
+	if (bHUDValid)
+	{
+		BlasterHUD->CharacterOverlay->HighPingImage->SetOpacity(1.f);
+		BlasterHUD->CharacterOverlay->PlayAnimation(BlasterHUD->CharacterOverlay->HighPingAnimation, 0.f, 5);
+	}
+}
+
+void ABlasterPlayerController::StopHighPingWarning()
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+
+	bool bHUDValid = BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->CharacterOverlay->HighPingImage && BlasterHUD->CharacterOverlay->HighPingAnimation;
+	if (bHUDValid)
+	{
+		BlasterHUD->CharacterOverlay->HighPingImage->SetOpacity(0.f);
+		if(BlasterHUD->CharacterOverlay->IsAnimationPlaying(BlasterHUD->CharacterOverlay->HighPingAnimation))
+		{
+			BlasterHUD->CharacterOverlay->StopAnimation(BlasterHUD->CharacterOverlay->HighPingAnimation);
+		}
 	}
 }
 

@@ -27,6 +27,9 @@ public:
 	UTextBlock* ShieldText;
 
 	UPROPERTY(meta = (BindWidget))
+	class UImage* ShieldImage;
+
+	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ScoreAmount;
 
 	UPROPERTY(meta = (BindWidget))
@@ -43,4 +46,10 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* GrenadesText;
+
+	UPROPERTY(meta = (BindWidget))
+	UImage* HighPingImage;
+
+	UPROPERTY(meta = (BindWidgetAnim), Transient)
+	UWidgetAnimation* HighPingAnimation;
 };
