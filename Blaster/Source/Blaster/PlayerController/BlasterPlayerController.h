@@ -27,6 +27,7 @@ public:
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void Tick(float Deltatime) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	void CheckPing(float Deltatime);
 
 	// 서버 시간과 동기화
 	virtual float GetServerTime();
@@ -69,6 +70,8 @@ protected:
 	UFUNCTION(Client, Reliable)
 	void ClientJoinMidGame(FName StateOfMatch, float WarmUp, float Match, float Cooldown, float StartingTime);
 
+	void StartHighPingWarning();
+	void StopHighPingWarning();
 private:
 	UPROPERTY()
 	class ABlasterHUD* BlasterHUD;
@@ -117,5 +120,18 @@ private:
 	bool bInitializeCarriedAmmo = false;
 	float HUDWeaponAmmo;
 	bool bInitializeWeaponAmmo = false;
-		
+
+	// Ping Warning
+	float HighPingRunningTime = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	float HighPingWarningDuration = 5.f;
+
+	float PingAnimationRunningTime = 0.f;
+	
+	UPROPERTY(EditAnywhere)
+	float CheckPingFrequency = 20.f;
+
+	UPROPERTY(EditAnywhere)
+	float HighPingTreshhold = 50.f;
 };

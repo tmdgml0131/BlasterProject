@@ -5,6 +5,7 @@
 #include "GameFramework/PlayerController.h"
 #include "CharacterOverlay.h"
 #include "Announcement.h"
+#include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 
@@ -39,12 +40,14 @@ void ABlasterHUD::ShowShieldUI()
 {
 	CharacterOverlay->ShieldBar->SetVisibility(ESlateVisibility::Visible);
 	CharacterOverlay->ShieldText->SetVisibility(ESlateVisibility::Visible);
+	CharacterOverlay->ShieldImage->SetVisibility(ESlateVisibility::Visible);
 }
 
 void ABlasterHUD::HideShieldUI()
 {
 	CharacterOverlay->ShieldBar->SetVisibility(ESlateVisibility::Hidden);
 	CharacterOverlay->ShieldText->SetVisibility(ESlateVisibility::Hidden);
+	CharacterOverlay->ShieldImage->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void ABlasterHUD::DrawHUD()
@@ -58,7 +61,7 @@ void ABlasterHUD::DrawHUD()
 		GEngine->GameViewport->GetViewportSize(ViewportSize);
 		const FVector2D ViewportCenter(ViewportSize.X / 2.f, ViewportSize.Y / 2.f);
 
-		// 조준점 확장
+		// ?????? ???
 		float SpreadScaled = CrosshairSpreadMax * HUDPackage.CrosshairSpread;
 		
 
@@ -79,13 +82,13 @@ void ABlasterHUD::DrawHUD()
 		}
 		if (HUDPackage.CrosshairsTop)
 		{
-			// u,v 좌표계라 생각과 반대임
+			// u,v ?????? ?????? ?????
 			FVector2D Spread(0.f, -SpreadScaled);
 			DrawCrosshair(HUDPackage.CrosshairsTop, ViewportCenter, Spread, HUDPackage.CrosshairColor);
 		}
 		if (HUDPackage.CrosshairsBottom)
 		{
-			// u,v 좌표계라 생각과 반대임
+			// u,v ?????? ?????? ?????
 			FVector2D Spread(0.f, SpreadScaled);
 			DrawCrosshair(HUDPackage.CrosshairsBottom, ViewportCenter, Spread, HUDPackage.CrosshairColor);
 		}
