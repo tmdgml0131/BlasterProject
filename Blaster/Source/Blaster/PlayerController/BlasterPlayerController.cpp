@@ -21,8 +21,6 @@ void ABlasterPlayerController::BeginPlay()
 	Super::BeginPlay();
 	BlasterHUD = Cast<ABlasterHUD>(GetHUD());
 	ServerCheckMatchState();
-
-	StartHighPingWarning();
 }
 
 void ABlasterPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -47,7 +45,7 @@ void ABlasterPlayerController::CheckPing(float Deltatime)
 		if(PlayerState)
 		{
 			// UE Getping은 실제 핑의 1/4 만 압축 되어전송, 따라서 *4 해줘야 실제 Ping이 나옴
-			if(PlayerState->GetPing() * 4 > HighPingTreshhold)
+			if(PlayerState->GetPing() * 4 > HighPingThreshold)
 			{
 				StartHighPingWarning();
 				PingAnimationRunningTime = 0.f;

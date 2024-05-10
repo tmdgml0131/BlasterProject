@@ -123,15 +123,14 @@ private:
 
 	// Ping Warning
 	float HighPingRunningTime = 0.f;
+	float PingAnimationRunningTime = 0.f;
 
 	UPROPERTY(EditAnywhere)
 	float HighPingWarningDuration = 5.f;
-
-	float PingAnimationRunningTime = 0.f;
 	
 	UPROPERTY(EditAnywhere)
 	float CheckPingFrequency = 20.f;
 
 	UPROPERTY(EditAnywhere)
-	float HighPingTreshhold = 50.f;
+	float HighPingThreshold = 50.f;
 };

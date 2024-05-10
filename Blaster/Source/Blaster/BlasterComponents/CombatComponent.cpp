@@ -199,6 +199,8 @@ void UCombatComponent::Fire()
 	if (CanFire())
 	{
 		ServerFire(HitTarget);
+		LocalFire(HitTarget);
+		
 		if (EquippedWeapon)
 		{
 			CrosshairShootingFactor = 2.f;
@@ -274,6 +276,12 @@ void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& Trac
 // 모든 클라이언트에서 발사 처리: 발사 이펙트 등을 클라이언트에게 동기화합니다.
 void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
 {
+	if(Character && Character->IsLocallyControlled()) return;
+	LocalFire(TraceHitTarget);
+}
+
+void UCombatComponent::LocalFire(const FVector_NetQuantize& TraceHitTarget)
+{
 	if (EquippedWeapon == nullptr) return;
 
 	// 샷건 예외처리
@@ -313,9 +321,9 @@ void UCombatComponent::EquipWeapon(class AWeapon* WeaponToEquip)
 
 void UCombatComponent::SwapWeapon()
 {
-	AWeapon* TempWeapon = EquippedWeapon;
-	EquippedWeapon = SecondaryWeapon;
-	SecondaryWeapon = TempWeapon;
+	if(CombatState !=  ECombatState::ECS_Unoccupied) return;
+	
+	Swap(EquippedWeapon, SecondaryWeapon);
 	
 	EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
 	SecondaryWeapon->SetWeaponState(EWeaponState::EWS_EquippedSecondary);

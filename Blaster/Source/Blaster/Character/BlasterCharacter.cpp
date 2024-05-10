@@ -26,7 +26,7 @@
 
 ABlasterCharacter::ABlasterCharacter()
 {
- 	// 매 프레임마다 Tick() 함수 호출
+	// 매 프레임마다 Tick() 함수 호출
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Spawn 시 충돌 스폰 관련 설정
@@ -867,7 +867,7 @@ void ABlasterCharacter::HideCameraIfCharacterClose()
 	}
 }
 
-// RPC 함수
+// RPC ???
 void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 {
 	if (CombatComponent)
