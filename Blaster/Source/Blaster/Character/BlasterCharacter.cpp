@@ -1,5 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-// BlasterCharacter: 캐릭터 관련 기능을 관리하는 컴포넌트입니다.
+// BlasterCharacter: ĳ???? ???? ????? ??????? ???????????.
 
 #include "BlasterCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -26,68 +26,68 @@
 
 ABlasterCharacter::ABlasterCharacter()
 {
- 	// 매 프레임마다 Tick() 함수 호출
+ 	// ?? ????????? Tick() ??? ???
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Spawn 시 충돌 스폰 관련 설정
+	// Spawn ?? ?浹 ???? ???? ????
 	SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-	// 스프링 암 컴포넌트 설정: 카메라 붐
+	// ?????? ?? ??????? ????: ???? ??
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(GetMesh());
 	CameraBoom->TargetArmLength = 500.f;
 	CameraBoom->bUsePawnControlRotation = true;
 
-	// 카메라 컴포넌트 설정
+	// ???? ??????? ????
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
-	// 플레이어 입력에 따라 캐릭터 회전 설정
+	// ?÷???? ??¿? ???? ĳ???? ??? ????
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
-	// HUD 설정
+	// HUD ????
 	OverheadWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("OverheadWidget"));
 	OverheadWidget->SetupAttachment(RootComponent);
 
-	// 전투 설정
+	// ???? ????
 	CombatComponent = CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComponent"));
 	CombatComponent->SetIsReplicated(true);
 
-	// 버프 설정
+	// ???? ????
 	BuffComponent = CreateDefaultSubobject<UBuffComponent>(TEXT("BuffComponent"));
 	BuffComponent->SetIsReplicated(true);
 
-	// 캐릭터 이동 설정: Crouch 가능하게 설정
+	// ĳ???? ??? ????: Crouch ??????? ????
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 
-	// 카메라와 충돌 설정
+	// ????? ?浹 ????
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetCollisionObjectType(ECC_SkeletalMesh);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 
-	// 캐릭터 회전 속도 조정
+	// ĳ???? ??? ??? ????
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 0.f, 850.f);
 
 	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
 
-	// Net Update Frequency 설정 - 초당 갱신 횟수를 의미, 66과 33이 일반적
-	// FPS 게임 같은 빠른 페이스의 게임은 DefaultEngine.ini 에 NetServerMaxTickRate 설정 또한 해야함
+	// Net Update Frequency ???? - ??? ???? ????? ???, 66?? 33?? ?????
+	// FPS ???? ???? ???? ??????? ?????? DefaultEngine.ini ?? NetServerMaxTickRate ???? ???? ?????
 	NetUpdateFrequency = 66.f;
 	MinNetUpdateFrequency = 33.f;
 
-	// Dissolve 효과를 위한 타임라인 컴포넌트 설정
+	// Dissolve ????? ???? ?????? ??????? ????
 	DissolveTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("DissolveTimelineComponent"));
 
-	// 수류탄
+	// ?????
 	AttachedGrenade = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Attached Grenade"));
 	AttachedGrenade->SetupAttachment(GetMesh(), FName("GrenadeSocket"));
 	AttachedGrenade->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
-// Replicated 설정한 변수들을 등록합니다
+// Replicated ?????? ???????? ???????
 void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 { 
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -108,7 +108,7 @@ void ABlasterCharacter::BeginPlay()
 	UpdateHUDHealth();
 	UpdateHUDShield();
 	
-	// 서버에서 데미지를 받을 때 호출될 함수를 바인드
+	// ???????? ???????? ???? ?? ???? ????? ???ε?
 	if (HasAuthority())
 	{
 		OnTakeAnyDamage.AddDynamic(this, &ThisClass::ReceiveDamage);
@@ -203,7 +203,7 @@ void ABlasterCharacter::RotateInPlace(float DeltaTime)
 	}
 	else
 	{
-		// Movement 가 Replicated 된 시간이 특정 시간보다 크다면.. ( 하드코딩 수정 필요 )
+		// Movement ?? Replicated ?? ?ð??? ??? ?ð????? ????.. ( ?????? ???? ??? )
 		TimeSinceLastMovementReplication += DeltaTime;
 		if (TimeSinceLastMovementReplication > 0.25f)
 		{
@@ -484,7 +484,7 @@ void ABlasterCharacter::CrouchButtonPressed()
 	}
 	else
 	{
-		// AActor 의 Crouch boolean 올려줌
+		// AActor ?? Crouch boolean ?÷???
 		Crouch();
 	}
 }
@@ -542,15 +542,15 @@ void ABlasterCharacter::OnRep_Shield(float LastShield)
 
 void ABlasterCharacter::AimOffset(float DeltaTime)
 {
-	// 무기가 없다면 return
+	// ???? ????? return
 	if (CombatComponent && CombatComponent->EquippedWeapon == nullptr) return;
 
-	// 캐릭터 속도
+	// ĳ???? ???
 	float Speed = CalculateSpeed();
 
 	bool bIsInAir = GetCharacterMovement()->IsFalling();
 
-	// 플레이어가 Idle 상태
+	// ?÷???? Idle ????
 	if (Speed == 0.f && !bIsInAir)
 	{
 
@@ -560,7 +560,7 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 		FRotator DeltaAimRotation = UKismetMathLibrary::NormalizedDeltaRotator(CurrentAimRotation, StartingAimRotation);
 		AO_Yaw = DeltaAimRotation.Yaw;
 
-		// Idle 상태라면 Interp 할 필요 없음
+		// Idle ???¶?? Interp ?? ??? ????
 		if (TurningInPlace == ETurningInPlace::ETIP_NotTurning)
 		{
 			InterpAO_Yaw = AO_Yaw;
@@ -569,7 +569,7 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 		TurnInPlace(DeltaTime);
 	}
 
-	// 달리기, 점프
+	// ?????, ????
 	if (Speed > 0.f || bIsInAir)
 	{
 		bRotateRootBone = false;
@@ -597,8 +597,8 @@ void ABlasterCharacter::CalculateAO_Pitch()
 {
 	AO_Pitch = GetBaseAimRotation().Pitch;
 
-	// Pitch / Rotation 이 Unreal Engine 에서 Multi-Player 위해 Packing 될 때, 압축되어 -90 ~ 0 이 아닌 270 ~ 360 값으로 들어감
-	// 따라서 Pitch 값이 90이 넘어갈 경우 수정 필요
+	// Pitch / Rotation ?? Unreal Engine ???? Multi-Player ???? Packing ?? ??, ?????? -90 ~ 0 ?? ??? 270 ~ 360 ?????? ???
+	// ???? Pitch ???? 90?? ??? ??? ???? ???
 	if (AO_Pitch > 90.f && !IsLocallyControlled())
 	{
 		// Pitch from [270, 360) -> [-90, 0)
@@ -716,11 +716,11 @@ void ABlasterCharacter::Elim()
 	// Primary Weapon
 	if (CombatComponent && CombatComponent->EquippedWeapon)
 	{
-		if(CombatComponent->EquippedWeapon->bDestroyWeapon) // Default Weapon 인 경우
+		if(CombatComponent->EquippedWeapon->bDestroyWeapon) // Default Weapon ?? ???
 		{
 			CombatComponent->EquippedWeapon->Destroy();
 		}
-		else // Default Weapon 아닌 경우
+		else // Default Weapon ??? ???
 		{
 			CombatComponent->EquippedWeapon->Dropped();
 		}
@@ -753,7 +753,7 @@ void ABlasterCharacter::MulticastElim_Implementation()
 	bElimmed = true;
 	PlayElimMontage();
 
-	// Dissolve 시작
+	// Dissolve ????
 	if (DissolveMaterialInstance)
 	{
 		DynamicDissolveMaterialInstance = UMaterialInstanceDynamic::Create(DissolveMaterialInstance, this);
@@ -763,11 +763,11 @@ void ABlasterCharacter::MulticastElim_Implementation()
 	}
 	StartDissolve();
 
-	// 캐릭터 움직임 제한
-	GetCharacterMovement()->DisableMovement();					// WASD 제한
-	GetCharacterMovement()->StopMovementImmediately();			// 마우스 제한
+	// ĳ???? ?????? ????
+	GetCharacterMovement()->DisableMovement();					// WASD ????
+	GetCharacterMovement()->StopMovementImmediately();			// ???콺 ????
 
-	// 입력 제한
+	// ??? ????
 	bDisableGameplay = true;
 	GetCharacterMovement()->DisableMovement();
 
@@ -776,11 +776,11 @@ void ABlasterCharacter::MulticastElim_Implementation()
 		CombatComponent->FireButtonPressed(false);
 	}
 	
-	// 충돌 제한
+	// ?浹 ????
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	// ElimBot 소환
+	// ElimBot ???
 	if (ElimBotEffect && ElimBotSound)
 	{
 		// Bot
@@ -867,7 +867,7 @@ void ABlasterCharacter::HideCameraIfCharacterClose()
 	}
 }
 
-// RPC 함수
+// RPC ???
 void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 {
 	if (CombatComponent)

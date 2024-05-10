@@ -4,6 +4,7 @@
     <file url="file://$PROJECT_DIR$/Source/Blaster/BlasterComponents/CombatComponent.cpp" charset="x-windows-949" />
     <file url="file://$PROJECT_DIR$/Source/Blaster/Character/BlasterCharacter.cpp" charset="x-windows-949" />
     <file url="file://$PROJECT_DIR$/Source/Blaster/Character/BlasterCharacter.h" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/Source/Blaster/PlayerController/BlasterPlayerController.h" charset="x-windows-949" />
     <file url="file://$PROJECT_DIR$/Source/Blaster/Weapon/HitScanWeapon.cpp" charset="x-windows-949" />
     <file url="PROJECT" charset="x-windows-949" />
   </component>
