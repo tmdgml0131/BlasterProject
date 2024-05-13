@@ -40,20 +40,17 @@ public:
 	virtual void OnRep_Owner() override;
 	void SetHUDAmmo();
 	FVector TraceEndWithScatter(const FVector& HitTarget);
-
-	// 무기 줍기 위젯 보여줌
+	
 	void ShowPickupWidget(bool bShowWidget);
 
-	// 발사
 	virtual void Fire(const FVector& HitTarget);
 
-	// 무기 드롭
+	// Weapon Drop
 	void Dropped();
-
-	// 총알 추가
+	
 	void AddAmmo(int32 AmmoToAdd);
 
-	// 조준자를 위한 Textures
+	// Textures for Crosshairs
 	UPROPERTY(EditAnywhere, Category = Crosshairs)
 	class UTexture2D* CrosshairsCenter;
 
@@ -85,7 +82,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	class USoundCue* EquipSound;
 
-	// 무기 테두리 Custom Depth ( 무기 Hollow Effect )
+	// Weapon Outline Custom Depth ( Weapon Hollow Effect )
 	void EnableCustomDepth(bool bEnable);
 
 	bool bDestroyWeapon = false;
@@ -138,18 +135,25 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ACasing> CasingClass;
 
-	// 현재 탄창량
-	UPROPERTY(EditAnywhere, ReplicatedUsing = OnRep_Ammo)
+	// Current Ammo
+	UPROPERTY(EditAnywhere)
 	int32 Ammo;
 
-	UFUNCTION()
-	void OnRep_Ammo();
+	UFUNCTION(Client, Reliable)
+	void ClientUpdateAmmo(int32 ServerAmmo);
 
+	UFUNCTION(Client, Reliable)
+	void ClientAddAmmo(int32 AmmoToAdd);
+	
 	void SpendRound();
 
-	// 최대 탄창량
+	// Max Ammo
 	UPROPERTY(EditAnywhere)
 	int32 MagCapacity;
+
+	// Number of unprocessed server request for ammo
+	// Incremented in SpendRound(), Decremented in ClientUpdateAmmo
+	int32 Sequence = 0;
 
 	UPROPERTY()
 	class ABlasterCharacter* BlasterOwnerCharacter;
