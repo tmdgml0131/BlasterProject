@@ -53,17 +53,19 @@ protected:
 
 	void SetAiming(bool bIsAiming);
 	
-	// RPC 함수
 	UFUNCTION(Server, Reliable)
 	void ServerSetAiming(bool bIsAiming);
 
 	void Fire();
 	void LocalFire(const FVector_NetQuantize& TraceHitTarget);
+	
+	void FireProjectileWeapon();
+	void FireHitScanWeapon();
+	void FireShotgun();
 
 	UFUNCTION(Server, Reliable)
 	void ServerFire(const FVector_NetQuantize& TraceHitTarget);
-
-	// 멀티캐스트 함수
+	
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
 
@@ -165,7 +167,6 @@ private:
 
 	bool CanFire();
 
-	// 현재 장착된 무기의 초탄 용량
 	UPROPERTY(ReplicatedUsing = OnRep_CarriedAmmo)
 	int32 CarriedAmmo;
 

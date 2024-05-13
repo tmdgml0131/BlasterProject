@@ -16,11 +16,12 @@ class BLASTER_API AHitScanWeapon : public AWeapon
 	
 public:
 	virtual void Fire(const FVector& HitTarget) override;
-
+	
 protected:
-	// Åº ÆÛÁü
-	FVector TraceEndWithScatter(const FVector& TraceStart, const FVector& HitTarget);
+	// Decide whether to use scatter or not
 	void WeaponTraceHit(const FVector& TraceStart, const FVector& HitTarget, FHitResult& OutHit);
+
+	void HandleCosmeticFeature(FTransform SocketTransform, FHitResult FireHit);
 
 	UPROPERTY(EditAnywhere)
 	class UParticleSystem* ImpactParticles;
@@ -39,14 +40,4 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	USoundCue* FireSound;
-
-	// ShoutGun Test - Åº ÆÛÁü
-	UPROPERTY(EditAnywhere, Category = "Weapon Scatter")
-	float DistanceToSphere = 800.f;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Scatter")
-	float SphereRadius = 75.f;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon Scatter")
-	bool bUseScatter = false;
 };
