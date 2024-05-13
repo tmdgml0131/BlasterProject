@@ -23,21 +23,15 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PostInitializeComponents() override;
 
-	// ??? ???????
 	void PlayFireMontage(bool bAiming);
-	// ???? ???????
 	void PlayReloadMontage();
-	// ???? ???????
 	void PlayElimMontage();
-	// ????? ???????
 	void PlayThrowGrenadeMontage();
 
 	virtual void OnRep_ReplicatedMovement() override;
 
-	// GameMode???? ?????? Elim
 	void Elim();
 
-	// ?¡À???? ????
 	UFUNCTION(NetMulticast, Reliable) 
 	void MulticastElim();
 
@@ -146,7 +140,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = CombatComponent)
 	UAnimMontage* ThrowGrenadeMontage;
 
-	// ???? ?????? ?¡À???? ????? ???
 	void HideCameraIfCharacterClose();
 
 	UPROPERTY(EditAnywhere)
@@ -206,7 +199,6 @@ private:
 	float ElimDealy = 3.f;
 
 	// Dissolve Effect
-	// Timeline ??? ?? Call-back Func. ???
 	UPROPERTY(VisibleAnywhere)
 	UTimelineComponent* DissolveTimeline;
 
@@ -220,11 +212,9 @@ private:
 	
 	void StartDissolve();
 
-	// Dynamic Instance, Runtime ?? ???? ????
 	UPROPERTY(VisibleAnywhere, Category = Elim)
 	UMaterialInstanceDynamic* DynamicDissolveMaterialInstance;
 
-	// Blueprint ???? ???? ?????? Material Instance ?? Dynamic Material ?? ????
 	UPROPERTY(EditAnywhere, Category = Elim)
 	UMaterialInstance* DissolveMaterialInstance;
 
@@ -241,7 +231,7 @@ private:
 	UPROPERTY()
 	class ABlasterPlayerState* BlasterPlayerState;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = CombatComponent)
 	UStaticMeshComponent* AttachedGrenade;
 
 	UPROPERTY(EditAnywhere)
