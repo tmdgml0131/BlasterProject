@@ -41,11 +41,11 @@ void ABlasterPlayerController::CheckPing(float Deltatime)
 	HighPingRunningTime += Deltatime;
 	if(HighPingRunningTime >= CheckPingFrequency)
 	{
-		PlayerState = PlayerState == nullptr ? GetPlayerState<APlayerState>() : PlayerState;
+		PlayerState = GetPlayerState<APlayerState>();
 		if(PlayerState)
 		{
 			// UE Getping은 실제 핑의 1/4 만 압축 되어전송, 따라서 *4 해줘야 실제 Ping이 나옴
-			if(PlayerState->GetPing() * 4 > HighPingThreshold)
+			if(PlayerState->GetCompressedPing() * 4 > HighPingThreshold)
 			{
 				StartHighPingWarning();
 				PingAnimationRunningTime = 0.f;

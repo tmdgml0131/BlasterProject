@@ -8,6 +8,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/AudioComponent.h"
 #include "RocketMovementComponent.h"
+#include "NiagaraSystemInstanceController.h"
 
 AProjectileRocket::AProjectileRocket()
 {

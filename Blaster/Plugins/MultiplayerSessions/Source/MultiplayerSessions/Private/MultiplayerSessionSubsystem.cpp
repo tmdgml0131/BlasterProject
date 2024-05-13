@@ -3,6 +3,7 @@
 
 #include "MultiplayerSessionSubsystem.h"
 #include "OnlineSubsystem.h"
+#include "Online/OnlineSessionNames.h"
 #include "OnlineSessionSettings.h"
 
 UMultiplayerSessionSubsystem::UMultiplayerSessionSubsystem():

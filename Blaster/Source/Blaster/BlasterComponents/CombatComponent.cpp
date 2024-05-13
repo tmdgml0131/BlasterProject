@@ -17,6 +17,7 @@
 #include "Blaster/Character/BlasterAnimInstance.h"
 #include "Blaster/Weapon/Projectile.h"
 #include "Evaluation/Blending/MovieSceneBlendType.h"
+#include "Blaster/Weapon/Shotgun.h"
 
 UCombatComponent::UCombatComponent()
 {
@@ -198,14 +199,54 @@ void UCombatComponent::Fire()
 {
 	if (CanFire())
 	{
-		ServerFire(HitTarget);
-		LocalFire(HitTarget);
-		
 		if (EquippedWeapon)
 		{
 			CrosshairShootingFactor = 2.f;
+
+			switch(EquippedWeapon->FireType)
+			{
+			case EFireType::EFT_Projectile:
+				FireProjectileWeapon();
+				break;
+			case EFireType::EFT_HitScan:
+				FireHitScanWeapon();
+				break;
+			case EFireType::EFT_Shotgun:
+				FireShotgun();
+				break;
+			default:
+				break;
+			}
 		}
 		StartFireTimer();
+	}
+
+}
+
+void UCombatComponent::FireProjectileWeapon()
+{
+	// Need to calculate the scatter first due to server-client discrepancy
+	HitTarget = EquippedWeapon->bUseScatter ? EquippedWeapon->TraceEndWithScatter(HitTarget) : HitTarget;
+	LocalFire(HitTarget);
+	ServerFire(HitTarget);
+}
+
+void UCombatComponent::FireHitScanWeapon()
+{
+	// Need to calculate the scatter first due to server-client discrepancy
+	HitTarget = EquippedWeapon->bUseScatter ? EquippedWeapon->TraceEndWithScatter(HitTarget) : HitTarget;
+	LocalFire(HitTarget);
+	ServerFire(HitTarget);
+}
+
+void UCombatComponent::FireShotgun()
+{
+	AShotgun* Shotgun = Cast<AShotgun>(EquippedWeapon);
+
+	if(Shotgun)
+	{
+		TArray<FVector> HitTargets;
+		Shotgun->ShotgunTraceEndWithScatter(HitTarget, HitTargets);
 	}
 
 }
