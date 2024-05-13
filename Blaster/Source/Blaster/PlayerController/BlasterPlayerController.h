@@ -29,10 +29,8 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	void CheckPing(float Deltatime);
 
-	// 서버 시간과 동기화
 	virtual float GetServerTime();
 
-	// 최대한 빨리 서버 시간과 동기화
 	virtual void ReceivedPlayer() override;
 	void OnMatchStateSet(FName State);
 
@@ -46,15 +44,12 @@ protected:
 
 	// Sync time between client-server
 
-	// 서버에 현재 시간 쿼리 함수
 	UFUNCTION(Server, Reliable)
 	void ServerRequestServerTime(float TimeOfClientRequest);
 
-	// 클라이언트에 서버 시간 전송
 	UFUNCTION(Client, Reliable)
 	void ClientReportServerTime(float TimeOfClientRequest, float TimeServerReceivedClientRequest);
 
-	// 클라이언트와 서버의 시간 차이
 	float ClientServerDelta = 0.f;
 
 	UPROPERTY(EditAnywhere, Category = Time)

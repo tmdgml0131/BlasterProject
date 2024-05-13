@@ -23,21 +23,21 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PostInitializeComponents() override;
 
-	// 발사 애니메이션
+	// ??? ???????
 	void PlayFireMontage(bool bAiming);
-	// 장전 애니메이션
+	// ???? ???????
 	void PlayReloadMontage();
-	// 죽음 애니메이션
+	// ???? ???????
 	void PlayElimMontage();
-	// 수류탄 애니메이션
+	// ????? ???????
 	void PlayThrowGrenadeMontage();
 
 	virtual void OnRep_ReplicatedMovement() override;
 
-	// GameMode에서 호출하는 Elim
+	// GameMode???? ?????? Elim
 	void Elim();
 
-	// 플레이어 죽음
+	// ?÷???? ????
 	UFUNCTION(NetMulticast, Reliable) 
 	void MulticastElim();
 
@@ -82,15 +82,12 @@ protected:
 	void FireButtonPressed();
 	void FireButtonReleased();
 
-	// 피격 애니메이션
+	// Hit Reaction
 	void PlayHitReactMontage();
 
-	// 데미지 처리 함수
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
 
-
-	// 관련 클래스 Poll 및 HUD Initialize 
 	void PollInit();
 
 	void RotateInPlace(float DeltaTime);
@@ -117,15 +114,12 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UBuffComponent* BuffComponent;
 
-	// RPC 함수
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
 
-	// RPC 함수
 	UFUNCTION(Server, Reliable)
 	void ServerRunButtonPressed();
 	
-	// RPC 함수
 	UFUNCTION(Server, Reliable)
 	void ServerRunButtonReleased();
 
@@ -152,7 +146,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = CombatComponent)
 	UAnimMontage* ThrowGrenadeMontage;
 
-	// 카메라 가까우면 플레이어 숨기는 함수
+	// ???? ?????? ?÷???? ????? ???
 	void HideCameraIfCharacterClose();
 
 	UPROPERTY(EditAnywhere)
@@ -212,7 +206,7 @@ private:
 	float ElimDealy = 3.f;
 
 	// Dissolve Effect
-	// Timeline 추가 시 Call-back Func. 필요
+	// Timeline ??? ?? Call-back Func. ???
 	UPROPERTY(VisibleAnywhere)
 	UTimelineComponent* DissolveTimeline;
 
@@ -226,11 +220,11 @@ private:
 	
 	void StartDissolve();
 
-	// Dynamic Instance, Runtime 에 변경 가능
+	// Dynamic Instance, Runtime ?? ???? ????
 	UPROPERTY(VisibleAnywhere, Category = Elim)
 	UMaterialInstanceDynamic* DynamicDissolveMaterialInstance;
 
-	// Blueprint 에서 변경 가능한 Material Instance 로 Dynamic Material 에 쓰임
+	// Blueprint ???? ???? ?????? Material Instance ?? Dynamic Material ?? ????
 	UPROPERTY(EditAnywhere, Category = Elim)
 	UMaterialInstance* DissolveMaterialInstance;
 
@@ -259,6 +253,7 @@ public:
 	AWeapon* GetEquippedWeapon();
 	FVector GetHitTarget() const;
 	ECombatState GetCombatState() const;
+	bool IsLocallyReloading();
 	
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }

@@ -33,10 +33,10 @@ void ABlasterPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 void ABlasterPlayerController::CheckPing(float Deltatime)
 {
 	// Lag Test Run
-	// DefaultEngine.ini 를 열고 하단에
+	// Open DefaultEngine.ini and add the following to the bottom
 	// [PacketSimulationSettings]
 	// PktLag = 100
-	// 추가하여 임의로 Lag을 줄 수 있다.
+	// By doing so, you can simulate Lag
 	
 	HighPingRunningTime += Deltatime;
 	if(HighPingRunningTime >= CheckPingFrequency)
@@ -44,7 +44,8 @@ void ABlasterPlayerController::CheckPing(float Deltatime)
 		PlayerState = GetPlayerState<APlayerState>();
 		if(PlayerState)
 		{
-			// UE Getping은 실제 핑의 1/4 만 압축 되어전송, 따라서 *4 해줘야 실제 Ping이 나옴
+			// When using GetCompressedPing, it only returns 1/4 of the actual Ping
+			// So, in order to bind with actual ping, need to multiply by 4
 			if(PlayerState->GetCompressedPing() * 4 > HighPingThreshold)
 			{
 				StartHighPingWarning();

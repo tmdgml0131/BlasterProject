@@ -401,15 +401,27 @@ void ABlasterCharacter::MoveRight(float Value)
 
 void ABlasterCharacter::RunButtonPressed()
 {
-	if (HasAuthority())
-	{
-		GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
-		bIsRunning = true;
-	}
-	else
+	GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+	bIsRunning = true;
+	if (!HasAuthority())
 	{
 		ServerRunButtonPressed();
 	}
+
+	/* Prev Code
+		if (HasAuthority())
+		{
+			GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+			bIsRunning = true;
+		}
+		else
+		{
+			ServerRunButtonPressed();
+		}
+
+		-- > Setting the value ALSO on the client helps to
+		synchronize value and reduce the lag
+	 */
 }
 
 void ABlasterCharacter::ServerRunButtonPressed_Implementation()
@@ -421,14 +433,9 @@ void ABlasterCharacter::ServerRunButtonPressed_Implementation()
 
 void ABlasterCharacter::RunButtonReleased()
 {
-	if (bDisableGameplay) return;
-
-	if (HasAuthority())
-	{
-		GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
-		bIsRunning = false;
-	}
-	else
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	bIsRunning = false;
+	if (!HasAuthority())
 	{
 		ServerRunButtonReleased();
 	}
@@ -596,9 +603,9 @@ void ABlasterCharacter::ReloadButtonPressed()
 void ABlasterCharacter::CalculateAO_Pitch()
 {
 	AO_Pitch = GetBaseAimRotation().Pitch;
-
-	// Pitch / Rotation 이 Unreal Engine 에서 Multi-Player 위해 Packing 될 때, 압축되어 -90 ~ 0 이 아닌 270 ~ 360 값으로 들어감
-	// 따라서 Pitch 값이 90이 넘어갈 경우 수정 필요
+	
+	// When Pitch / Rotation is packed in UE for Multiplayer, the value is NOT -90 ~ 0 but 270 ~ 360
+	// So, when the pitch is over 90, it needs to be fixed
 	if (AO_Pitch > 90.f && !IsLocallyControlled())
 	{
 		// Pitch from [270, 360) -> [-90, 0)
@@ -930,5 +937,12 @@ ECombatState ABlasterCharacter::GetCombatState() const
 	if (CombatComponent == nullptr) return ECombatState::ECS_MAX;
 
 	return CombatComponent->CombatState;
+}
+
+bool ABlasterCharacter::IsLocallyReloading()
+{
+	if(!CombatComponent) return false;
+
+	return CombatComponent->bLocallyReloading;
 }
 
