@@ -17,7 +17,6 @@ AWeapon::AWeapon()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	// ???? Replicated ????
 	bReplicates = true;
 	SetReplicateMovement(true);
 	
