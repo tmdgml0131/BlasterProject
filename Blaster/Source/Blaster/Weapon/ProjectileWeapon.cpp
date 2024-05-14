@@ -35,5 +35,6 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 				World->SpawnActor<AProjectile>(ProjectileClass, SocketTransform.GetLocation(), TargetRotation, SpawnParams);
 			}
 		}
+
 	}
 }
