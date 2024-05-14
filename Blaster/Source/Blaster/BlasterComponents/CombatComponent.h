@@ -143,7 +143,7 @@ private:
 	void OnRep_Aiming();
 
 	UPROPERTY(EditAnywhere)
-	float AimWalkSpeed;
+	float DefaultAimWalkSpeed;
 
 	bool bFireButtonPressed;
 
@@ -192,7 +192,7 @@ private:
 	int32 MaxCarriedAmmo = 500;
 
 	UPROPERTY(EditAnywhere)
-	int32 StartingARAmmo = 30;
+	int32 StartingARAmmo = 100;
 
 	UPROPERTY(EditAnywhere)
 	int32 StartingRocketAmmo = 0;
@@ -239,8 +239,11 @@ private:
 	void UpdateHUDGrenades();
 
 	class UCameraComponent* FollowCamera;
+
+	float GetAimWalkSpeed() const;
 public:
 	FORCEINLINE int32 GetGrenades() const { return Grenades; }
+	
 	bool ShouldSwapWeapon();
 
 };

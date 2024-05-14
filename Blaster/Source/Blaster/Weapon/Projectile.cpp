@@ -18,7 +18,7 @@ AProjectile::AProjectile()
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 	
-	// 투사체 Collision
+	// Projectile Collision
 	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
 	SetRootComponent(CollisionBox);
 	CollisionBox->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
@@ -87,13 +87,13 @@ void AProjectile::ExplodeDamage()
 			UGameplayStatics::ApplyRadialDamageWithFalloff(
 				this,								// World Context Object
 				Damage,								// Base Damage
-				10.f,								// 최소 데미지
-				GetActorLocation(),					// 폭발 구심점
-				DamageInnerRadius,					// 구심점 내부
-				DamageOuterRadius,					// 구심점 외부
-				1.f,								// 데미지 감소 매커니즘 ( y=x )
-				UDamageType::StaticClass(),			// 데미지 타입 클래스
-				TArray<AActor*>(),					// 무시할 액터, 이 경우 None
+				10.f,								// Minimum Damage
+				GetActorLocation(),					// Center of the Explosion
+				DamageInnerRadius,					// Radius for Inner Explosion
+				DamageOuterRadius,					// Radius for Outer Explosion
+				1.f,								// Damage Decrement Logic ( y=x )
+				UDamageType::StaticClass(),			// DamageTypeClass
+				TArray<AActor*>(),					// Actor to Ignore, in this case NONE
 				this,								// Damage Causer
 				FiringController					// Instigator Controller
 			);

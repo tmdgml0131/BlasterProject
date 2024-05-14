@@ -22,7 +22,7 @@ UCombatComponent::UCombatComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
-	AimWalkSpeed = 450.f;
+	DefaultAimWalkSpeed = 450.f;
 }
 
 void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -106,6 +106,13 @@ void UCombatComponent::UpdateHUDGrenades()
 	{
 		Controller->SetHUDGrenades(Grenades);
 	}
+}
+
+float UCombatComponent::GetAimWalkSpeed() const
+{
+	if(!Character) return 0.f;
+
+	return Character->GetCharacterMovement()->MaxWalkSpeed * 0.75;
 }
 
 bool UCombatComponent::ShouldSwapWeapon()
@@ -882,7 +889,7 @@ void UCombatComponent::SetAiming(bool bIsAiming)
 	ServerSetAiming(bIsAiming);
 	if (Character)
 	{
-		Character->GetCharacterMovement()->MaxWalkSpeed = bIsAiming? AimWalkSpeed : Character->GetCharacterWalkSpeed();
+		Character->GetCharacterMovement()->MaxWalkSpeed = bIsAiming? GetAimWalkSpeed() : Character->GetCharacterWalkSpeed();
 	}
 
 	if (Character->IsLocallyControlled() && EquippedWeapon->GetWeaponType() == EWeaponType::EWT_SniperRifle)
@@ -901,7 +908,7 @@ void UCombatComponent::ServerSetAiming_Implementation(bool bIsAiming)
 	bAiming = bIsAiming;
 	if (Character)
 	{
-		Character->GetCharacterMovement()->MaxWalkSpeed = bIsAiming ? AimWalkSpeed : Character->GetCharacterWalkSpeed();
+		Character->GetCharacterMovement()->MaxWalkSpeed = bIsAiming ? GetAimWalkSpeed() : Character->GetCharacterWalkSpeed();
 	}
 }
 
