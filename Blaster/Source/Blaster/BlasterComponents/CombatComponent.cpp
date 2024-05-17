@@ -538,6 +538,8 @@ void UCombatComponent::ShowAttachedGrenade(bool bShow)
 
 void UCombatComponent::Reload()
 {
+	if(!Character) return;
+	if(Character->GetCharacterMovement()->IsFalling()) return;
 	if (EquippedWeapon && EquippedWeapon->IsFull()) return;
 
 	if (CarriedAmmo > 0 && CombatState == ECombatState::ECS_Unoccupied && !bLocallyReloading)
@@ -552,12 +554,14 @@ void UCombatComponent::FinishReloading()
 {
 	if (Character == nullptr) return;
 	bLocallyReloading = false;
+	
 	if (Character->HasAuthority())
 	{
 		CombatState = ECombatState::ECS_Unoccupied;
+		
 		UpdateAmmoValue();
 	}
-
+	
 	if (bFireButtonPressed)
 	{
 		Fire();

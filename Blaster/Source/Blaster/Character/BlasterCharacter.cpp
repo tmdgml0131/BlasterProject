@@ -1,5 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-// BlasterCharacter: 캐릭터 관련 기능을 관리하는 컴포넌트입니다.
 
 #include "BlasterCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -23,71 +22,149 @@
 #include "Blaster/PlayerState/BlasterPlayerState.h"
 #include "Blaster/Weapon/WeaponTypes.h"
 #include "Elements/SMInstance/SMInstanceElementEditorSelectionInterface.h"
+#include "Components/BoxComponent.h"
 
 ABlasterCharacter::ABlasterCharacter()
 {
-	// 매 프레임마다 Tick() 함수 호출
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Spawn 시 충돌 스폰 관련 설정
+	// Spawn Settings when spawned
 	SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-	// 스프링 암 컴포넌트 설정: 카메라 붐
+	// SpringArm component + Camera boom
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(GetMesh());
 	CameraBoom->TargetArmLength = 500.f;
 	CameraBoom->bUsePawnControlRotation = true;
 
-	// 카메라 컴포넌트 설정
+	// Settings for Camera Component
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
-	// 플레이어 입력에 따라 캐릭터 회전 설정
+	// Decide whether to rotate due to player input
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
-	// HUD 설정
+	// HUD
 	OverheadWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("OverheadWidget"));
 	OverheadWidget->SetupAttachment(RootComponent);
 
-	// 전투 설정
+	// CombatComponent
 	CombatComponent = CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComponent"));
 	CombatComponent->SetIsReplicated(true);
 
-	// 버프 설정
+	// BuffComponent
 	BuffComponent = CreateDefaultSubobject<UBuffComponent>(TEXT("BuffComponent"));
 	BuffComponent->SetIsReplicated(true);
 
-	// 캐릭터 이동 설정: Crouch 가능하게 설정
+	// Enable Crouch
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 
-	// 카메라와 충돌 설정
+	// Camera Collision
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetCollisionObjectType(ECC_SkeletalMesh);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 
-	// 캐릭터 회전 속도 조정
+	// Character Rotation Speed
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 0.f, 850.f);
 
 	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
 
-	// Net Update Frequency 설정 - 초당 갱신 횟수를 의미, 66과 33이 일반적
-	// FPS 게임 같은 빠른 페이스의 게임은 DefaultEngine.ini 에 NetServerMaxTickRate 설정 또한 해야함
+	// Net Update Frequency - updating every second, usually 66 && 33
+	// Fast-paced game like FPS, should set the [NetServerMaxTickRate] in DefaultEngine.ini
 	NetUpdateFrequency = 66.f;
 	MinNetUpdateFrequency = 33.f;
 
-	// Dissolve 효과를 위한 타임라인 컴포넌트 설정
+	// Dissolve Timeline Component -> When eliminated
 	DissolveTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("DissolveTimelineComponent"));
 
-	// 수류탄
+	// Grenade
 	AttachedGrenade = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Attached Grenade"));
 	AttachedGrenade->SetupAttachment(GetMesh(), FName("GrenadeSocket"));
 	AttachedGrenade->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	// Hit Boxes for server-side rewind
+	InitializeBoxComponents();
 }
 
-// Replicated 설정한 변수들을 등록합니다
+void ABlasterCharacter::InitializeBoxComponents()
+{
+	head = CreateDefaultSubobject<UBoxComponent>(TEXT("head"));
+	head->SetupAttachment(GetMesh(), FName("head"));
+	head->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	pelvis = CreateDefaultSubobject<UBoxComponent>(TEXT("pelvis"));
+	pelvis->SetupAttachment(GetMesh(), FName("pelvis"));
+	pelvis->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	spine_02 = CreateDefaultSubobject<UBoxComponent>(TEXT("spine_02"));
+	spine_02->SetupAttachment(GetMesh(), FName("spine_02"));
+	spine_02->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	spine_03 = CreateDefaultSubobject<UBoxComponent>(TEXT("spine_03"));
+	spine_03->SetupAttachment(GetMesh(), FName("spine_03"));
+	spine_03->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	upperarm_l = CreateDefaultSubobject<UBoxComponent>(TEXT("upperarm_l"));
+	upperarm_l->SetupAttachment(GetMesh(), FName("upperarm_l"));
+	upperarm_l->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	upperarm_r = CreateDefaultSubobject<UBoxComponent>(TEXT("upperarm_r"));
+	upperarm_r->SetupAttachment(GetMesh(), FName("upperarm_r"));
+	upperarm_r->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	lowerarm_l = CreateDefaultSubobject<UBoxComponent>(TEXT("lowerarm_l"));
+	lowerarm_l->SetupAttachment(GetMesh(), FName("lowerarm_l"));
+	lowerarm_l->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	lowerarm_r = CreateDefaultSubobject<UBoxComponent>(TEXT("lowerarm_r"));
+	lowerarm_r->SetupAttachment(GetMesh(), FName("lowerarm_r"));
+	lowerarm_r->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	hand_l = CreateDefaultSubobject<UBoxComponent>(TEXT("hand_l"));
+	hand_l->SetupAttachment(GetMesh(), FName("hand_l"));
+	hand_l->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	hand_r = CreateDefaultSubobject<UBoxComponent>(TEXT("hand_r"));
+	hand_r->SetupAttachment(GetMesh(), FName("hand_r"));
+	hand_r->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
+	backpack = CreateDefaultSubobject<UBoxComponent>(TEXT("backpack"));
+	backpack->SetupAttachment(GetMesh(), FName("backpack"));
+	backpack->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	blanket = CreateDefaultSubobject<UBoxComponent>(TEXT("blanket"));
+	blanket->SetupAttachment(GetMesh(), FName("backpack"));
+	blanket->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	thigh_l = CreateDefaultSubobject<UBoxComponent>(TEXT("thigh_l"));
+	thigh_l->SetupAttachment(GetMesh(), FName("thigh_l"));
+	thigh_l->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	thigh_r = CreateDefaultSubobject<UBoxComponent>(TEXT("thigh_r"));
+	thigh_r->SetupAttachment(GetMesh(), FName("hand_r"));
+	thigh_r->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
+	calf_l = CreateDefaultSubobject<UBoxComponent>(TEXT("calf_l"));
+	calf_l->SetupAttachment(GetMesh(), FName("calf_l"));
+	calf_l->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	calf_r = CreateDefaultSubobject<UBoxComponent>(TEXT("calf_r"));
+	calf_r->SetupAttachment(GetMesh(), FName("calf_r"));
+	calf_r->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	foot_l = CreateDefaultSubobject<UBoxComponent>(TEXT("foot_l"));
+	foot_l->SetupAttachment(GetMesh(), FName("foot_l"));
+	foot_l->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	foot_r = CreateDefaultSubobject<UBoxComponent>(TEXT("foot_r"));
+	foot_r->SetupAttachment(GetMesh(), FName("foot_r"));
+	foot_r->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+
 void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 { 
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -108,7 +185,7 @@ void ABlasterCharacter::BeginPlay()
 	UpdateHUDHealth();
 	UpdateHUDShield();
 	
-	// 서버에서 데미지를 받을 때 호출될 함수를 바인드
+	// ReceieveDamage
 	if (HasAuthority())
 	{
 		OnTakeAnyDamage.AddDynamic(this, &ThisClass::ReceiveDamage);
@@ -203,7 +280,7 @@ void ABlasterCharacter::RotateInPlace(float DeltaTime)
 	}
 	else
 	{
-		// Movement 가 Replicated 된 시간이 특정 시간보다 크다면.. ( 하드코딩 수정 필요 )
+		// If Movement is lager than the replicated time (0.25f)
 		TimeSinceLastMovementReplication += DeltaTime;
 		if (TimeSinceLastMovementReplication > 0.25f)
 		{
@@ -279,7 +356,7 @@ void ABlasterCharacter::PlayReloadMontage()
 		default:
 			break;
 		}
-
+		
 		AnimInstance->Montage_JumpToSection(SectionName);
 	}
 }
@@ -491,7 +568,6 @@ void ABlasterCharacter::CrouchButtonPressed()
 	}
 	else
 	{
-		// AActor 의 Crouch boolean 올려줌
 		Crouch();
 	}
 }
@@ -549,15 +625,14 @@ void ABlasterCharacter::OnRep_Shield(float LastShield)
 
 void ABlasterCharacter::AimOffset(float DeltaTime)
 {
-	// 무기가 없다면 return
 	if (CombatComponent && CombatComponent->EquippedWeapon == nullptr) return;
 
-	// 캐릭터 속도
+	// Character Speed
 	float Speed = CalculateSpeed();
 
 	bool bIsInAir = GetCharacterMovement()->IsFalling();
 
-	// 플레이어가 Idle 상태
+	// Character Idle
 	if (Speed == 0.f && !bIsInAir)
 	{
 
@@ -567,7 +642,7 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 		FRotator DeltaAimRotation = UKismetMathLibrary::NormalizedDeltaRotator(CurrentAimRotation, StartingAimRotation);
 		AO_Yaw = DeltaAimRotation.Yaw;
 
-		// Idle 상태라면 Interp 할 필요 없음
+		// No need to interp if character is idle
 		if (TurningInPlace == ETurningInPlace::ETIP_NotTurning)
 		{
 			InterpAO_Yaw = AO_Yaw;
@@ -576,7 +651,7 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 		TurnInPlace(DeltaTime);
 	}
 
-	// 달리기, 점프
+	// Run / Jump 
 	if (Speed > 0.f || bIsInAir)
 	{
 		bRotateRootBone = false;
@@ -669,7 +744,7 @@ void ABlasterCharacter::Jump()
 void ABlasterCharacter::FireButtonPressed()
 {
 	if (bDisableGameplay) return;
-
+	
 	if (CombatComponent)
 	{
 		CombatComponent->FireButtonPressed(true);
@@ -723,11 +798,11 @@ void ABlasterCharacter::Elim()
 	// Primary Weapon
 	if (CombatComponent && CombatComponent->EquippedWeapon)
 	{
-		if(CombatComponent->EquippedWeapon->bDestroyWeapon) // Default Weapon 인 경우
+		if(CombatComponent->EquippedWeapon->bDestroyWeapon) // Default Weapon
 		{
 			CombatComponent->EquippedWeapon->Destroy();
 		}
-		else // Default Weapon 아닌 경우
+		else // Not Default Weapon
 		{
 			CombatComponent->EquippedWeapon->Dropped();
 		}
@@ -760,7 +835,7 @@ void ABlasterCharacter::MulticastElim_Implementation()
 	bElimmed = true;
 	PlayElimMontage();
 
-	// Dissolve 시작
+	// Dissolve Start
 	if (DissolveMaterialInstance)
 	{
 		DynamicDissolveMaterialInstance = UMaterialInstanceDynamic::Create(DissolveMaterialInstance, this);
@@ -770,11 +845,11 @@ void ABlasterCharacter::MulticastElim_Implementation()
 	}
 	StartDissolve();
 
-	// 캐릭터 움직임 제한
-	GetCharacterMovement()->DisableMovement();					// WASD 제한
-	GetCharacterMovement()->StopMovementImmediately();			// 마우스 제한
+	// Restrain Character Movement
+	GetCharacterMovement()->DisableMovement();					// WASD
+	GetCharacterMovement()->StopMovementImmediately();			// Mouse
 
-	// 입력 제한
+	// Input
 	bDisableGameplay = true;
 	GetCharacterMovement()->DisableMovement();
 
@@ -783,11 +858,11 @@ void ABlasterCharacter::MulticastElim_Implementation()
 		CombatComponent->FireButtonPressed(false);
 	}
 	
-	// 충돌 제한
+	// Collision
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	// ElimBot 소환
+	// ElimBot
 	if (ElimBotEffect && ElimBotSound)
 	{
 		// Bot

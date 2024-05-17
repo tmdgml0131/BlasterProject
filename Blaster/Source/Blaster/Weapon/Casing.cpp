@@ -11,8 +11,10 @@ ACasing::ACasing()
 
 	CasingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CasingMesh"));
 	SetRootComponent(CasingMesh);
-	// 카메라와 총알 충돌 방지
+	
+	// Collision Setting for Pawn / Camera
 	CasingMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+	CasingMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 	
 	CasingMesh->SetSimulatePhysics(true);
 	CasingMesh->SetEnableGravity(true);
@@ -26,7 +28,7 @@ void ACasing::BeginPlay()
 	Super::BeginPlay();
 	
 	CasingMesh->OnComponentHit.AddDynamic(this, &ThisClass::OnHit);
-	// 탄피 튕겨나가는 효과
+	// Casing Impulse
 	CasingMesh->AddImpulse(GetActorForwardVector() * ShellEjectionImpulse);
 }
 

@@ -31,6 +31,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
 
+
+	int32 test = 0;
 	void FireButtonPressed(bool bPressed);
 
 	UFUNCTION(BlueprintCallable)

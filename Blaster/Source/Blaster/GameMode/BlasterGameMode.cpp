@@ -75,7 +75,6 @@ void ABlasterGameMode::OnMatchStateSet()
 
 void ABlasterGameMode::PlayerEliminated(ABlasterCharacter* ElimmedCharacter, ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController)
 {
-	// 자살 체크
 	ABlasterPlayerState* AttackerPlayerState = AttackerController ? Cast<ABlasterPlayerState>(AttackerController->PlayerState) : nullptr;
 	ABlasterPlayerState* VictimPlayerState = VictimController ? Cast<ABlasterPlayerState>(VictimController->PlayerState) : nullptr;
 
@@ -98,12 +97,11 @@ void ABlasterGameMode::PlayerEliminated(ABlasterCharacter* ElimmedCharacter, ABl
 	}
 }
 
+// Character Respawn
 void ABlasterGameMode::RequestRespawn(ACharacter* ElimmedCharacter, AController* ElimmedController)
 {
 	if (ElimmedCharacter)
 	{
-		// Controller에서 Detach함 -> UnPossess() 호출 
-		// 캐릭터는 사라지지만 PlayerController는 남음
 		ElimmedCharacter->Reset();
 
 		ElimmedCharacter->Destroy();
