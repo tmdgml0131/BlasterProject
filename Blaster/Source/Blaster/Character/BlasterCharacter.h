@@ -201,7 +201,7 @@ private:
 	void HideCameraIfCharacterClose();
 
 	UPROPERTY(EditAnywhere)
-	float CameraTreshold = 200.f;
+	float CameraThreshold = 200.f;
 
 	bool bRotateRootBone;
 

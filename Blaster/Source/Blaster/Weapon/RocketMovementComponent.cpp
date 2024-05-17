@@ -12,5 +12,5 @@ UProjectileMovementComponent::EHandleBlockingHitResult URocketMovementComponent:
 
 void URocketMovementComponent::HandleImpact(const FHitResult& Hit, float TimeSlice, const FVector& MoveDelta)
 {
-	// Rocket 은 멈추지 않고, Collide 시에 터지기만 해야함
+	// Rocket ?? ?????? ???, Collide ??? ?????? ?????
 }
