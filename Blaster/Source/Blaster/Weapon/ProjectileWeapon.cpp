@@ -19,7 +19,6 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 	{
 		FTransform SocketTransform = MuzzleFlashSocket->GetSocketTransform(GetWeaponMesh());
 
-		// MuzzleFlash 소켓부터 TraceUnderCrosshairs 함수로 생성된 Trace 까지의 Vector 거리
 		FVector ToTarget = HitTarget - SocketTransform.GetLocation();
 		FRotator TargetRotation = ToTarget.Rotation();
 
