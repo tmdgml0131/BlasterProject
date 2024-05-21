@@ -42,7 +42,7 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	// Character Weapon
 	bWeaponEquipped = BlasterCharacter->IsWeaponEquipped();
 	EquippedWeapon = BlasterCharacter->GetEquippedWeapon();
-
+	
 	// Character Crouch
 	bIsCrouched = BlasterCharacter->bIsCrouched;
 
