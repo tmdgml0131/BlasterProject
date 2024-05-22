@@ -50,6 +50,11 @@ void ABlasterPlayerController::CheckPing(float Deltatime)
 			{
 				StartHighPingWarning();
 				PingAnimationRunningTime = 0.f;
+				ServerReportPingStatus(true);
+			}
+			else
+			{
+				ServerReportPingStatus(false);
 			}
 		}
 		HighPingRunningTime = 0.f;
@@ -69,6 +74,11 @@ void ABlasterPlayerController::CheckPing(float Deltatime)
 			StopHighPingWarning();
 		}
 	}
+}
+
+void ABlasterPlayerController::ServerReportPingStatus_Implementation(bool bHighPing)
+{
+	HighPingDelegate.Broadcast(bHighPing);
 }
 
 void ABlasterPlayerController::Tick(float Deltatime)

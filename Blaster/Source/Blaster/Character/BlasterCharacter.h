@@ -27,6 +27,7 @@ public:
 	void PlayFireMontage(bool bAiming);
 	void PlayReloadMontage();
 	void PlayElimMontage();
+	void PlaySwapMontage();
 	void PlayThrowGrenadeMontage();
 
 	virtual void OnRep_ReplicatedMovement() override;
@@ -203,6 +204,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = CombatComponent)
 	UAnimMontage* ThrowGrenadeMontage;
+	
+	UPROPERTY(EditAnywhere, Category = CombatComponent)
+	UAnimMontage* SwapMontage;
 
 	void HideCameraIfCharacterClose();
 

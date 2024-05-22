@@ -1,5 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-// BlasterAnimInstance: ©¦?????? ????????? ??????? ???????????.
+// BlasterAnimInstance: ???????? ????????? ??????? ???????????.
 
 
 #include "BlasterAnimInstance.h"
@@ -106,7 +106,9 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	}
 
 	bUseFABRIK = BlasterCharacter->GetCombatState() == ECombatState::ECS_Unoccupied;
-	if(BlasterCharacter->IsLocallyControlled() && BlasterCharacter->GetCombatState() != ECombatState::ECS_ThrowingGrenade)
+	bool bFABRIKOverride = BlasterCharacter->IsLocallyControlled() &&
+		BlasterCharacter->GetCombatState() != ECombatState::ECS_ThrowingGrenade && BlasterCharacter->GetCombatState() != ECombatState::ECS_SwappingWeapons;
+	if(bFABRIKOverride)
 	{
 		bUseFABRIK = !BlasterCharacter->IsLocallyReloading();
 	}
