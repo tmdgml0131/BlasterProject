@@ -10,13 +10,6 @@
 
 void UReturnToMainMenu::MenuSetup()
 {
-	SetMenuBaseSetup();
-
-	BindMultiplayerSession();
-}
-
-void UReturnToMainMenu::SetMenuBaseSetup()
-{
 	AddToViewport();
 	SetVisibility(ESlateVisibility::Visible);
 	bIsFocusable = true;
@@ -24,7 +17,7 @@ void UReturnToMainMenu::SetMenuBaseSetup()
 	UWorld* World = GetWorld();
 	if(World)
 	{
-		PlayerController == nullptr ? World->GetFirstPlayerController() : PlayerController;
+		PlayerController = PlayerController == nullptr ? World->GetFirstPlayerController() : PlayerController;
 		if(PlayerController)
 		{
 			FInputModeGameAndUI InputModeData;
@@ -33,11 +26,8 @@ void UReturnToMainMenu::SetMenuBaseSetup()
 			PlayerController->SetShowMouseCursor(true);
 		}
 	}
-}
-
-void UReturnToMainMenu::BindMultiplayerSession()
-{
-	if(ReturnButton)
+	
+	if(ReturnButton && !ReturnButton->OnClicked.IsBound())
 	{
 		ReturnButton->OnClicked.AddDynamic(this, &ThisClass::OnReturnButtonClicked);
 	}
@@ -46,7 +36,7 @@ void UReturnToMainMenu::BindMultiplayerSession()
 	if(GameInstance)
 	{
 		MultiplayerSessionSubsystem = GameInstance->GetSubsystem<UMultiplayerSessionSubsystem>();
-		if(MultiplayerSessionSubsystem)
+		if(MultiplayerSessionSubsystem && ! MultiplayerSessionSubsystem->MultiplayerOnDestroySessionComplete.IsBound())
 		{
 			MultiplayerSessionSubsystem->MultiplayerOnDestroySessionComplete.AddDynamic(this, &ThisClass::OnDestroySession);
 		}
@@ -68,6 +58,17 @@ void UReturnToMainMenu::MenuTearDown()
 			PlayerController->SetShowMouseCursor(false);
 		}
 	}
+	
+	if(ReturnButton && ReturnButton->OnClicked.IsBound())
+	{
+		ReturnButton->OnClicked.RemoveDynamic(this, &ThisClass::OnReturnButtonClicked);
+	}
+
+	if(MultiplayerSessionSubsystem && MultiplayerSessionSubsystem->MultiplayerOnDestroySessionComplete.IsBound())
+	{
+		MultiplayerSessionSubsystem->MultiplayerOnDestroySessionComplete.RemoveDynamic(this, &ThisClass::OnDestroySession);
+	}
+	
 }
 
 bool UReturnToMainMenu::Initialize()

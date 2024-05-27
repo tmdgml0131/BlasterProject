@@ -15,9 +15,7 @@ class BLASTER_API UReturnToMainMenu : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	void SetMenuBaseSetup();
 	void MenuSetup();
-	void BindMultiplayerSession();
 	void MenuTearDown();
 
 protected:

@@ -42,6 +42,15 @@ public:
 
 	FHighPingDelegate HighPingDelegate;
 protected:
+	virtual void SetupInputComponent() override;
+	
+	// Enhanced Input
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputMappingContext* PlayerControllerMappingContext;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* QuitAction;
+	
 	virtual void BeginPlay() override;
 	void SetHUDTime();
 	void InitializeHUD();
@@ -72,10 +81,20 @@ protected:
 
 	void StartHighPingWarning();
 	void StopHighPingWarning();
+
+	void ShowReturnToMainMenu();
 private:
 	UPROPERTY()
 	class ABlasterHUD* BlasterHUD;
 
+	UPROPERTY(EditAnywhere, Category = HUD)
+	TSubclassOf<class UUserWidget> ReturnToMainMenuWidget;
+
+	UPROPERTY()
+	class UReturnToMainMenu* ReturnToMainMenu;
+
+	bool bReturnToMainMenuOpen = false;
+	
 	UPROPERTY()
 	class ABlasterGameMode* BlasterGameMode;
 
