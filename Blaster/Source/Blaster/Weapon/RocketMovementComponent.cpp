@@ -12,5 +12,5 @@ UProjectileMovementComponent::EHandleBlockingHitResult URocketMovementComponent:
 
 void URocketMovementComponent::HandleImpact(const FHitResult& Hit, float TimeSlice, const FVector& MoveDelta)
 {
-	// Rocket ?? ?????? ???, Collide ??? ?????? ?????
+
 }

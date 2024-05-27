@@ -24,6 +24,7 @@
 #include "Components/BoxComponent.h"
 #include "Blaster/BlasterComponents/LagCompensationComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
 
 ABlasterCharacter::ABlasterCharacter()
 {
@@ -480,23 +481,69 @@ void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const 
 void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	
+	/* Old Input
+	//PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ThisClass::Jump);
+	//PlayerInputComponent->BindAction("Equip", IE_Pressed, this, &ThisClass::EquipButtonPressed);
+	//PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &ThisClass::CrouchButtonPressed);
+	//PlayerInputComponent->BindAction("Aim", IE_Pressed, this, &ThisClass::AimButtonPressed);
+	//PlayerInputComponent->BindAction("Aim", IE_Released, this, &ThisClass::AimButtonReleased);
+	//PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ThisClass::FireButtonPressed);
+	//PlayerInputComponent->BindAction("Fire", IE_Released, this, &ThisClass::FireButtonReleased);
+	//PlayerInputComponent->BindAction("Run", IE_Pressed, this, &ThisClass::RunButtonPressed);
+	//PlayerInputComponent->BindAction("Run", IE_Released, this, &ThisClass::RunButtonReleased);
+	//PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ThisClass::ReloadButtonPressed);
+	//PlayerInputComponent->BindAction("ThrowGrenade", IE_Pressed, this, &ThisClass::ThrowGrenadeButtonPressed);
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ThisClass::Jump);
-	PlayerInputComponent->BindAction("Equip", IE_Pressed, this, &ThisClass::EquipButtonPressed);
-	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &ThisClass::CrouchButtonPressed);
-	PlayerInputComponent->BindAction("Aim", IE_Pressed, this, &ThisClass::AimButtonPressed);
-	PlayerInputComponent->BindAction("Aim", IE_Released, this, &ThisClass::AimButtonReleased);
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ThisClass::FireButtonPressed);
-	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ThisClass::FireButtonReleased);
-	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &ThisClass::RunButtonPressed);
-	PlayerInputComponent->BindAction("Run", IE_Released, this, &ThisClass::RunButtonReleased);
-	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ThisClass::ReloadButtonPressed);
-	PlayerInputComponent->BindAction("ThrowGrenade", IE_Pressed, this, &ThisClass::ThrowGrenadeButtonPressed);
+	//PlayerInputComponent->BindAxis("MoveForward", this, &ThisClass::MoveForward);
+	//PlayerInputComponent->BindAxis("MoveRight", this, &ThisClass::MoveRight);
+	//PlayerInputComponent->BindAxis("Turn", this, &ThisClass::Turn);
+	//PlayerInputComponent->BindAxis("LookUp", this, &ThisClass::LookUp);
+	*/
+	
+	// Enhanced Input
+	if(UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Move);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ThisClass::Jump);
+		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &ThisClass::EquipButtonPressed);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &ThisClass::CrouchButtonPressed);
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &ThisClass::AimButtonPressed);
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &ThisClass::AimButtonReleased);
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &ThisClass::FireButtonPressed);
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &ThisClass::FireButtonReleased);
+		EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Started, this, &ThisClass::RunButtonPressed);
+		EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Completed, this, &ThisClass::RunButtonReleased);
+		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &ThisClass::ReloadButtonPressed);
+		EnhancedInputComponent->BindAction(ThrowGrenadeAction, ETriggerEvent::Triggered, this, &ThisClass::ThrowGrenadeButtonPressed);
+	}
+}
 
-	PlayerInputComponent->BindAxis("MoveForward", this, &ThisClass::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ThisClass::MoveRight);
-	PlayerInputComponent->BindAxis("Turn", this, &ThisClass::Turn);
-	PlayerInputComponent->BindAxis("LookUp", this, &ThisClass::LookUp);
+void ABlasterCharacter::Move(const FInputActionValue& Value)
+{
+	if (bDisableGameplay || !Controller) return;
+	
+	const FVector2D MovementVector = Value.Get<FVector2D>();
+
+	const FRotator Rotation =  Controller->GetControlRotation();
+	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+
+	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	AddMovementInput(ForwardDirection, MovementVector.Y);
+	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	AddMovementInput(RightDirection, MovementVector.X);
+}
+
+void ABlasterCharacter::Look(const FInputActionValue& Value)
+{
+	const FVector2D LookAxisValue = Value.Get<FVector2D>();
+
+	if(Controller)
+	{
+		AddControllerYawInput(LookAxisValue.X);
+		AddControllerPitchInput(LookAxisValue.Y);
+	}
 }
 
 void ABlasterCharacter::MoveForward(float Value)
@@ -521,6 +568,20 @@ void ABlasterCharacter::MoveRight(float Value)
 		const FVector Direction(FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y));
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void ABlasterCharacter::Turn(float Value)
+{
+	if (bDisableGameplay) return;
+
+	AddControllerYawInput(Value);
+}
+
+void ABlasterCharacter::LookUp(float Value)
+{
+	if (bDisableGameplay) return;
+
+	AddControllerPitchInput(Value);
 }
 
 void ABlasterCharacter::RunButtonPressed()
@@ -570,17 +631,6 @@ void ABlasterCharacter::ServerRunButtonReleased_Implementation()
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 	bIsRunning = false;
 }
-
-void ABlasterCharacter::Turn(float Value)
-{
-	AddControllerYawInput(Value);
-}
-
-void ABlasterCharacter::LookUp(float Value)
-{
-	AddControllerPitchInput(Value);
-}
-
 
 void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 {

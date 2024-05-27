@@ -23,5 +23,7 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AProjectile> ServerSideRewindProjectileClass;
-	
+
+	UPROPERTY(EditAnywhere)
+	bool bIsExplosiveProjectile;
 };

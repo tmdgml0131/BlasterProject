@@ -20,8 +20,8 @@ AProjectileGrenade::AProjectileGrenade()
 
 void AProjectileGrenade::BeginPlay()
 {
-	// 수류탄은 Projectile BeginPlay 요소가 필요 없다.
-	// OnHit에 터지거나 Trace 가 아닌 튕겨야하기 때문
+	// Grenade doesn't need BeginPlay() from projectile, but AActor
+	// Because,neither it should blow nor trace, but bounce
 	AActor::BeginPlay();
 
 	StartDestroyTimer();

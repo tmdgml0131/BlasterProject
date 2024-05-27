@@ -8,6 +8,7 @@
 #include "Blaster/Interfaces/InteractWithCrosshairsInterface.h"
 #include "Components/TimelineComponent.h"
 #include "Blaster/BlasterTypes/CombatState.h"
+#include "InputActionValue.h"
 //////////////////////////////////////////////////
 #include "BlasterCharacter.generated.h"
 
@@ -60,8 +61,40 @@ protected:
 
 	// Enhanced Input
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	class UInputMappingContext* BlasterCharacterMappingContext; 
+	class UInputMappingContext* BlasterCharacterMappingContext;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* MoveAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* LookAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* JumpAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* EquipAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* CrouchAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* AimAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* FireAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* RunAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* ReloadAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputAction* ThrowGrenadeAction;
+
+	void Move(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
 	// Movement / Action
 	void MoveForward(float Value);
 	void MoveRight(float Value);
