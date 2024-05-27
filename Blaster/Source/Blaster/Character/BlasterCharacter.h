@@ -58,6 +58,10 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	// Enhanced Input
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputMappingContext* BlasterCharacterMappingContext; 
+	
 	// Movement / Action
 	void MoveForward(float Value);
 	void MoveRight(float Value);
