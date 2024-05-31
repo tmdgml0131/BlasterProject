@@ -4,6 +4,7 @@
 #include "ReturnToMainMenu.h"
 
 #include "MultiplayerSessionSubsystem.h"
+#include "Blaster/Character/BlasterCharacter.h"
 #include "Components/Button.h"
 #include "GameFramework/GameModeBase.h"
 #include "GameFramework/PlayerController.h"
@@ -111,6 +112,29 @@ void UReturnToMainMenu::OnDestroySession(bool bWasSuccessful)
 void UReturnToMainMenu::OnReturnButtonClicked()
 {
 	ReturnButton->SetIsEnabled(false);
+
+	UWorld* World = GetWorld();
+	if(World)
+	{
+		APlayerController* FirstPlayerController = World->GetFirstPlayerController();
+		if(FirstPlayerController)
+		{
+			ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(FirstPlayerController->GetPawn());
+			if(BlasterCharacter)
+			{
+				BlasterCharacter->ServerLeaveGame();
+				BlasterCharacter->OnLeftGame.AddDynamic(this, &ThisClass::OnPlayerLeftGame);
+			}
+			else
+			{
+				ReturnButton->SetIsEnabled(true);
+			}
+		}
+	}
+}
+
+void UReturnToMainMenu::OnPlayerLeftGame()
+{
 	
 	if(MultiplayerSessionSubsystem)
 	{

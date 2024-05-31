@@ -12,6 +12,8 @@
 //////////////////////////////////////////////////
 #include "BlasterCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnLeftGame);
+
 UCLASS()
 class BLASTER_API ABlasterCharacter : public ACharacter, public IInteractWithCrosshairsInterface
 {
@@ -32,11 +34,12 @@ public:
 	void PlayThrowGrenadeMontage();
 
 	virtual void OnRep_ReplicatedMovement() override;
+	void DropOrDestroyWeapon();
 
-	void Elim();
+	void Elim(bool bPlayerLeftGame);
 
 	UFUNCTION(NetMulticast, Reliable) 
-	void MulticastElim();
+	void MulticastElim(bool bPlayerLeftGame);
 
 	virtual void Destroyed() override;
 	
@@ -56,6 +59,11 @@ public:
 
 	UPROPERTY()
 	TMap<FName, class UBoxComponent*> HitCollisionBoxes;
+	
+	UFUNCTION(Server, Reliable)
+	void ServerLeaveGame();
+	
+	FOnLeftGame OnLeftGame;
 protected:
 	virtual void BeginPlay() override;
 
@@ -299,6 +307,8 @@ private:
 	FTimerHandle ElimTimer;
 
 	void ElimTimerFinished();
+
+	bool bLeftGame = false;
 
 	UPROPERTY(EditDefaultsOnly)
 	float ElimDealy = 3.f;
