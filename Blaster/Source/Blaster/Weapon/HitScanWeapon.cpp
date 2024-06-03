@@ -12,6 +12,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "WeaponTypes.h"
 #include "Blaster/PlayerController/BlasterPlayerController.h"
+#include "Evaluation/Blending/MovieSceneBlendType.h"
 
 void AHitScanWeapon::Fire(const FVector& HitTarget)
 {
@@ -36,7 +37,9 @@ void AHitScanWeapon::Fire(const FVector& HitTarget)
 			bool bCauseAuthDamage = !bUseServerSideRewind || OwnerPawn->IsLocallyControlled();
 			if(HasAuthority() && bCauseAuthDamage)		// NO ServerSideRewind
 			{
-				UGameplayStatics::ApplyDamage(BlasterCharacter, Damage, InstigatorController, this, UDamageType::StaticClass());
+				const float DamageToCause = FireHit.BoneName.ToString() == FString("head") ? HeadShotDamage : Damage; 
+				
+				UGameplayStatics::ApplyDamage(BlasterCharacter, DamageToCause, InstigatorController, this, UDamageType::StaticClass());
 			}
 			
 			if(!HasAuthority() && bUseServerSideRewind)		// ServerSideRewind
@@ -97,6 +100,11 @@ void AHitScanWeapon::WeaponTraceHit(const FVector& TraceStart, const FVector& Hi
 		{
 			BeamEnd = OutHit.ImpactPoint;
 		}
+		else
+		{
+			OutHit.ImpactPoint = End;
+		}
+		
 		if (BeamParticles)
 		{
 			UParticleSystemComponent* Beam = UGameplayStatics::SpawnEmitterAtLocation(World, BeamParticles, TraceStart, FRotator::ZeroRotator, true);

@@ -452,7 +452,9 @@ void ULagCompensationComponent::ServerScoreRequest_Implementation(ABlasterCharac
 
 	if(Character && HitCharacter && DamageCauser && Confirm.bHitConfirmed)
 	{
-		UGameplayStatics::ApplyDamage(HitCharacter, DamageCauser->GetDamage(), Character->Controller, DamageCauser, UDamageType::StaticClass());
+		const float Damage = Confirm.bHeadShot ? DamageCauser->GetHeadShotDamage() : DamageCauser->GetDamage();
+		
+		UGameplayStatics::ApplyDamage(HitCharacter, Damage, Character->Controller, DamageCauser, UDamageType::StaticClass());
 	}
 }
 
@@ -461,9 +463,11 @@ void ULagCompensationComponent::ProjectileServerScoreRequest_Implementation(ABla
 {
 	FServerSideRewindResult Confirm = ProjectileServerSideRewind(HitCharacter, TraceStart, InitialVelocity, HitTime);
 
-	if(Character && HitCharacter && Confirm.bHitConfirmed)
+	if(Character && HitCharacter && Confirm.bHitConfirmed && Character->GetEquippedWeapon())
 	{
-		UGameplayStatics::ApplyDamage(HitCharacter, Character->GetEquippedWeapon()->GetDamage(),
+		const float Damage = Confirm.bHeadShot ? Character->GetEquippedWeapon()->GetHeadShotDamage() : Character->GetEquippedWeapon()->GetDamage();
+		
+		UGameplayStatics::ApplyDamage(HitCharacter, Damage,
 			Character->Controller, Character->GetEquippedWeapon(), UDamageType::StaticClass());
 	}
 }

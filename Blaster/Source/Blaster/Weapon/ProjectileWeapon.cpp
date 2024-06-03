@@ -39,6 +39,7 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 					{
 						SpawnedProjectile->bUseServerSideRewind = false;
 						SpawnedProjectile->Damage = bIsExplosiveProjectile? SpawnedProjectile->Damage : Damage;	// projectile decide the damage if its explosive, else the weapon decide
+						SpawnedProjectile->HeadShotDamage = HeadShotDamage;
 					}
 				}
 				else										    // Server, not locally controlled, spawn non-replicated projectile, SSR
@@ -82,6 +83,7 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 				{
 					SpawnedProjectile->bUseServerSideRewind = false;
 					SpawnedProjectile->Damage = bIsExplosiveProjectile? SpawnedProjectile->Damage : Damage;	// projectile decide the damage if its explosive, else the weapon decide
+					SpawnedProjectile->HeadShotDamage = HeadShotDamage;
 				}
 			}
 		}
