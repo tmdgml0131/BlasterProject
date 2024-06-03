@@ -8,6 +8,10 @@
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "ElimAnnouncement.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
+#include "Components/CanvasPanelSlot.h"
+#include "Components/HorizontalBox.h"
 
 void ABlasterHUD::BeginPlay()
 {
@@ -36,6 +40,50 @@ void ABlasterHUD::AddAnnouncement()
 	}
 }
 
+void ABlasterHUD::AddElimAnnouncement(FString Attacker, FString Victim)
+{
+	OwningPlayer = OwningPlayer == nullptr ? GetOwningPlayerController() : OwningPlayer;
+	if(OwningPlayer && ElimAnnouncementClass)
+	{
+		UElimAnnouncement* ElimAnnouncement = CreateWidget<UElimAnnouncement>(OwningPlayer, ElimAnnouncementClass);
+		if(ElimAnnouncement)
+		{
+			ElimAnnouncement->SetElimAnnouncementText(Attacker, Victim);
+			ElimAnnouncement->AddToViewport();
+
+			// Moving up the announcements
+			for(UElimAnnouncement* Msg : ElimMessages)
+			{
+				if(Msg && Msg->AnnouncementBox)
+				{
+					UCanvasPanelSlot* CanvasSlot = UWidgetLayoutLibrary::SlotAsCanvasSlot(Msg->AnnouncementBox);
+					if(CanvasSlot)
+					{
+						FVector2d Position = CanvasSlot->GetPosition();
+						FVector2d NewPosition(CanvasSlot->GetPosition().X, Position.Y - CanvasSlot->GetSize().Y);
+						CanvasSlot->SetPosition(NewPosition);
+					}
+				}
+			}
+			
+			ElimMessages.Add(ElimAnnouncement);
+
+			FTimerHandle ElimMsgTimer;
+			FTimerDelegate ElimMsgDelegate;
+			ElimMsgDelegate.BindUFunction(this, FName("ElimAnnouncementTimerFinished"), ElimAnnouncement);
+			GetWorld()->GetTimerManager().SetTimer(ElimMsgTimer, ElimMsgDelegate, ElimAnnouncementTime, false);
+		}
+	}
+}
+
+void ABlasterHUD::ElimAnnouncementTimerFinished(UElimAnnouncement* MsgToRemove)
+{
+	if(MsgToRemove)
+	{
+		MsgToRemove->RemoveFromParent();
+	}
+}
+
 void ABlasterHUD::ShowShieldUI()
 {
 	CharacterOverlay->ShieldBar->SetVisibility(ESlateVisibility::Visible);
@@ -61,10 +109,8 @@ void ABlasterHUD::DrawHUD()
 		GEngine->GameViewport->GetViewportSize(ViewportSize);
 		const FVector2D ViewportCenter(ViewportSize.X / 2.f, ViewportSize.Y / 2.f);
 
-		// ?????? ???
 		float SpreadScaled = CrosshairSpreadMax * HUDPackage.CrosshairSpread;
 		
-
 		if (HUDPackage.CrosshairsCenter)
 		{
 			FVector2D Spread(0.f, 0.f);
@@ -82,19 +128,16 @@ void ABlasterHUD::DrawHUD()
 		}
 		if (HUDPackage.CrosshairsTop)
 		{
-			// u,v ?????? ?????? ?????
 			FVector2D Spread(0.f, -SpreadScaled);
 			DrawCrosshair(HUDPackage.CrosshairsTop, ViewportCenter, Spread, HUDPackage.CrosshairColor);
 		}
 		if (HUDPackage.CrosshairsBottom)
 		{
-			// u,v ?????? ?????? ?????
 			FVector2D Spread(0.f, SpreadScaled);
 			DrawCrosshair(HUDPackage.CrosshairsBottom, ViewportCenter, Spread, HUDPackage.CrosshairColor);
 		}
 	}
 }
-
 
 void ABlasterHUD::DrawCrosshair(UTexture2D* Texture, FVector2D ViewportCenter, FVector2D Spread, FLinearColor CrosshairColor)
 {
