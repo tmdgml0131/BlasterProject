@@ -64,7 +64,14 @@ public:
 	void ServerLeaveGame();
 	
 	FOnLeftGame OnLeftGame;
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastGainedTheLead();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastLostTheLead();
 protected:
+	void InitializeInputSetup();
 	virtual void BeginPlay() override;
 
 	// Enhanced Input
@@ -345,6 +352,15 @@ private:
 
 	UPROPERTY()
 	class ABlasterPlayerState* BlasterPlayerState;
+
+	UPROPERTY(EditAnywhere)
+	class UNiagaraSystem* CrownSystem;
+
+	UPROPERTY(EditAnywhere)
+	FVector CrownOffset;
+	
+	UPROPERTY()
+	class UNiagaraComponent* CrownComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = CombatComponent)
 	UStaticMeshComponent* AttachedGrenade;

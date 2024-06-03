@@ -25,6 +25,9 @@
 #include "Blaster/BlasterComponents/LagCompensationComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "Blaster/GameState/BlasterGameState.h"
 
 ABlasterCharacter::ABlasterCharacter()
 {
@@ -191,10 +194,54 @@ void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(ABlasterCharacter, bDisableGameplay);
 }
 
+void ABlasterCharacter::MulticastGainedTheLead_Implementation()
+{
+	if(!CrownSystem) return;
+	if(!CrownComponent)
+	{
+		CrownComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
+			CrownSystem,
+			GetCapsuleComponent(),
+			FName(),
+			GetActorLocation() + CrownOffset,
+			GetActorRotation(),
+			EAttachLocation::KeepWorldPosition,
+			false
+		);
+	}
+
+	if(CrownComponent)
+	{
+		CrownComponent->Activate();
+	}
+}
+
+void ABlasterCharacter::MulticastLostTheLead_Implementation()
+{
+	if(CrownComponent)
+	{
+		CrownComponent->DestroyComponent();
+	}
+}
+
+void ABlasterCharacter::InitializeInputSetup()
+{
+	BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
+	if(BlasterPlayerController)
+	{
+		UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(BlasterPlayerController->GetLocalPlayer());
+		if(Subsystem)
+		{
+			Subsystem->AddMappingContext(BlasterCharacterMappingContext, 0);
+		}
+	}
+}
+
 void ABlasterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	InitializeInputSetup();
 	SpawnDefaultWeapon();
 	UpdateHUDAmmo();
 	
@@ -209,16 +256,6 @@ void ABlasterCharacter::BeginPlay()
 	if (AttachedGrenade)
 	{
 		AttachedGrenade->SetVisibility(false);
-	}
-
-	BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
-	if(BlasterPlayerController)
-	{
-		UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(BlasterPlayerController->GetLocalPlayer());
-		if(Subsystem)
-		{
-			Subsystem->AddMappingContext(BlasterCharacterMappingContext, 0);
-		}
 	}
 }
 
@@ -276,6 +313,12 @@ void ABlasterCharacter::PollInit()
 		{
 			BlasterPlayerState->AddToScore(0.f);
 			BlasterPlayerState->AddToDefeats(0);
+
+			ABlasterGameState* BlasterGameState = Cast<ABlasterGameState>(UGameplayStatics::GetGameState(this));
+			if(BlasterGameState && BlasterGameState->TopScoringPlayers.Contains(BlasterPlayerState))
+			{
+				MulticastGainedTheLead();
+			}
 		}
 	}
 }
@@ -1001,6 +1044,11 @@ void ABlasterCharacter::MulticastElim_Implementation(bool bPlayerLeftGame)
 	if (bHideSniperScope)
 	{
 		ShowSniperScopeWidget(false);
+	}
+
+	if(CrownComponent)
+	{
+		CrownComponent->DestroyComponent();
 	}
 	
 	GetWorldTimerManager().SetTimer(ElimTimer, this, &ThisClass::ElimTimerFinished, ElimDealy);
