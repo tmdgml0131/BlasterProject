@@ -9,7 +9,7 @@
 void ATeamGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
-
+	
 	ABlasterGameState* BGameState = Cast<ABlasterGameState>(UGameplayStatics::GetGameState(this));
 	if(BGameState)
 	{
@@ -46,6 +46,20 @@ void ATeamGameMode::Logout(AController* Exiting)
 			BGameState->BlueTeam.Remove(BPState);
 		}
 	}
+}
+
+float ATeamGameMode::CalculateDamage(AController* Attacker, AController* Victim, float BaseDamage)
+{
+	if(!Attacker || !Victim) return BaseDamage;
+	
+	ABlasterPlayerState* AttackerPState = Attacker->GetPlayerState<ABlasterPlayerState>();
+	ABlasterPlayerState* VictimPState = Victim->GetPlayerState<ABlasterPlayerState>();
+	
+	if(!AttackerPState || !VictimPState) return BaseDamage;																	// null check
+	if(AttackerPState == VictimPState) return BaseDamage;																	// self-damage
+	if(AttackerPState->GetTeam() == ETeam::ET_NoTeam || VictimPState->GetTeam() == ETeam::ET_NoTeam) return BaseDamage;		// no team check == NPC
+	if(AttackerPState->GetTeam() == VictimPState->GetTeam()) return 0.f;													// team check
+	return BaseDamage;
 }
 
 void ATeamGameMode::HandleMatchHasStarted()
