@@ -26,7 +26,7 @@ class MULTIPLAYERSESSIONS_API UMultiplayerSessionSubsystem : public UGameInstanc
 
 public:
 	UMultiplayerSessionSubsystem();
-
+	
 	// To handle Session functionality. The Menu class will call these
 	void CreateSession(int32 NumPublicConnections, FString MatchType);
 	void FindSession(int32 MaxSearchResults);

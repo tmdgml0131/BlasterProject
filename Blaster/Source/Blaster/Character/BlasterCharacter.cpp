@@ -97,6 +97,20 @@ ABlasterCharacter::ABlasterCharacter()
 	InitializeBoxComponents();
 }
 
+void ABlasterCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if(APlayerController* PlayeraController = Cast<APlayerController>(GetController()))
+	{
+		UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayeraController->GetLocalPlayer());
+		if(Subsystem)
+		{
+			Subsystem->AddMappingContext(PlayerControllerMappingContext, 0);
+		}
+	}
+}
+
 void ABlasterCharacter::InitializeBoxComponents()
 {
 	head = CreateDefaultSubobject<UBoxComponent>(TEXT("head"));

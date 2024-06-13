@@ -24,12 +24,6 @@ void ABlasterPlayerController::BeginPlay()
 	Super::BeginPlay();
 	BlasterHUD = Cast<ABlasterHUD>(GetHUD());
 	ServerCheckMatchState();
-
-	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(this->GetLocalPlayer());
-	if(Subsystem)
-	{
-		Subsystem->AddMappingContext(PlayerControllerMappingContext, 0);
-	}
 }
 
 void ABlasterPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -165,15 +159,15 @@ void ABlasterPlayerController::ShowReturnToMainMenu()
 
 void ABlasterPlayerController::ServerCheckMatchState_Implementation()
 {
-	ABlasterGameMode* GameMode = Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this));
+	BlasterGameMode = BlasterGameMode == nullptr ? Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this)) : BlasterGameMode;
 
-	if (GameMode)
+	if (BlasterGameMode)
 	{
-		WarmupTime = GameMode->WarmupTime;
-		MatchTime = GameMode->MatchTime;
-		CooldownTime = GameMode->CooldownTime;
-		LevelStartingTime = GameMode->LevelStartingTime;
-		MatchState = GameMode->GetMatchState();
+		WarmupTime = BlasterGameMode->WarmupTime;
+		MatchTime = BlasterGameMode->MatchTime;
+		CooldownTime = BlasterGameMode->CooldownTime;
+		LevelStartingTime = BlasterGameMode->LevelStartingTime;
+		MatchState = BlasterGameMode->GetMatchState();
 		ClientJoinMidGame(MatchState, WarmupTime, MatchTime, CooldownTime, LevelStartingTime);
 	}
 }
@@ -197,7 +191,7 @@ void ABlasterPlayerController::ClientJoinMidGame_Implementation(FName StateOfMat
 void ABlasterPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-
+	
 	ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(InPawn);
 	if (BlasterCharacter)
 	{

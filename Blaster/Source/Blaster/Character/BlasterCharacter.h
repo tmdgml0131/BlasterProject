@@ -23,6 +23,8 @@ class BLASTER_API ABlasterCharacter : public ACharacter, public IInteractWithCro
 public:
 	void InitializeBoxComponents();
 	ABlasterCharacter();
+
+	virtual void PossessedBy(AController* NewController) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -76,7 +78,11 @@ public:
 protected:
 	void InitializeInputSetup();
 	virtual void BeginPlay() override;
-
+	
+	// Enhanced Input
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	class UInputMappingContext* PlayerControllerMappingContext;
+	
 	// Enhanced Input
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	class UInputMappingContext* BlasterCharacterMappingContext;

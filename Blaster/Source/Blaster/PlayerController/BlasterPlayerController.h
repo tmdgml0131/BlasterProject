@@ -46,10 +46,6 @@ public:
 protected:
 	virtual void SetupInputComponent() override;
 	
-	// Enhanced Input
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	class UInputMappingContext* PlayerControllerMappingContext;
-	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	class UInputAction* QuitAction;
 	
