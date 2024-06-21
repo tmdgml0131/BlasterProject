@@ -26,6 +26,10 @@ public:
 	void SetHUDMatchCountdown(float CountdownTime);
 	void SetHUDAnnouncementCountdown(float CountdownTime);
 	void SetHUDGrenades(int32 Grenades);
+	void HideTeamScore();
+	void InitTeamScore();
+	void SetHUDRedTeamScore(int32 RedScore);
+	void SetHUDBlueTeamScore(int32 BlueScore);
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void Tick(float Deltatime) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -34,9 +38,9 @@ public:
 	virtual float GetServerTime();
 
 	virtual void ReceivedPlayer() override;
-	void OnMatchStateSet(FName State);
+	void OnMatchStateSet(FName State, bool bTeamsMatch = false);
 
-	void HandleMatchHasStarted();
+	void HandleMatchHasStarted(bool bTeamsMatch = false);
 	void HandleCooldown();
 	float SingleTripTime = 0.f;
 
@@ -84,6 +88,12 @@ protected:
 
 	UFUNCTION(Client, Reliable)
 	void ClientElimAnnouncement(APlayerState* Attacker, APlayerState* Victim);
+
+	UPROPERTY(ReplicatedUsing = OnRep_ShowTeamScores)
+	bool bShowTeamScores = false;
+
+	UFUNCTION()
+	void OnRep_ShowTeamScores();
 private:
 	UPROPERTY()
 	class ABlasterHUD* BlasterHUD;
@@ -156,4 +166,6 @@ private:
 	
 	UPROPERTY(EditAnywhere)
 	float HighPingThreshold = 50.f;
+	
+	bool bInitializeTeamScores = false;
 };

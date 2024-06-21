@@ -39,6 +39,7 @@ public:
 
 	float LevelStartingTime = 0.f;
 
+	bool bTeamsMatch = false;
 protected:
 	virtual void BeginPlay();
 	virtual void OnMatchStateSet();
