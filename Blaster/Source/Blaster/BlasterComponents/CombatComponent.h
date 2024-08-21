@@ -16,7 +16,6 @@ class BLASTER_API UCombatComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	
 	UCombatComponent();
 	friend class ABlasterCharacter;
 
@@ -27,7 +26,7 @@ public:
 	void SwapWeapon();
 
 	void Reload();
-
+	
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
 
@@ -36,8 +35,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void FinishSwapAttachedWeapon();
-
-	int32 test = 0;
+	
 	void FireButtonPressed(bool bPressed);
 
 	UFUNCTION(BlueprintCallable)
@@ -72,7 +70,7 @@ protected:
 	void FireHitScanWeapon();
 	void FireShotgun();
 
-	UFUNCTION(Server, Reliable, WithValidation)
+	UFUNCTION(Server, Reliable/*, WithValidation*/)
 	void ServerFire(const FVector_NetQuantize& TraceHitTarget, float FireDelay);
 	
 	UFUNCTION(NetMulticast, Reliable)

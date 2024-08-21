@@ -19,6 +19,8 @@ AWeapon::AWeapon()
 
 	bReplicates = true;
 	SetReplicateMovement(true);
+
+	SetWeaponState(EWeaponState::EWS_Initial);
 	
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
 	SetRootComponent(WeaponMesh);
@@ -114,7 +116,7 @@ void AWeapon::OnWeaponStateSet()
 
 void AWeapon::OnPingTooHigh(bool bPingTooHigh)
 {
-	bUseServerSideRewind = !bPingTooHigh;
+	//bUseServerSideRewind = !bPingTooHigh;
 }
 
 void AWeapon::OnRep_WeaponState()

@@ -328,15 +328,15 @@ void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& Trac
 	MulticastFire(TraceHitTarget);
 }
 
-bool UCombatComponent::ServerFire_Validate(const FVector_NetQuantize& TraceHitTarget, float FireDelay)
+/*bool UCombatComponent::ServerFire_Validate(const FVector_NetQuantize& TraceHitTarget, float FireDelay)
 {
 	if(EquippedWeapon)
 	{
-		bool bNearlyEqual = FMath::IsNearlyEqual(EquippedWeapon->FireDelay, FireDelay, 0.001f);
+		bool bNearlyEqual = FMath::IsNearlyEqual(EquippedWeapon->FireDelay, FireDelay, 100000.1f);
 		return bNearlyEqual;
 	}
 	return true;
-}
+}*/
 
 void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
 {
@@ -414,9 +414,28 @@ void UCombatComponent::EquipWeapon(class AWeapon* WeaponToEquip)
 void UCombatComponent::SwapWeapon()
 {
 	if(!Character || CombatState !=  ECombatState::ECS_Unoccupied || !Character->HasAuthority()) return;
-
+	
 	Character->PlaySwapMontage();
 	CombatState = ECombatState::ECS_SwappingWeapons;
+	Character->bFinishedSwapping = false;
+	
+	Swap(EquippedWeapon, SecondaryWeapon);
+		
+	SecondaryWeapon->SetWeaponState(EWeaponState::EWS_EquippedSecondary);
+	AttachActorToBackpack(SecondaryWeapon);
+	
+	EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
+	AttachActorToRightHand(EquippedWeapon);
+	EquippedWeapon->SetHUDAmmo();
+	UpdateCarriedAmmo();
+	PlayEquipWeaponSound(EquippedWeapon);
+	
+	ReloadEmptyWeapon();
+	
+	if(Character)
+	{
+		Character->bFinishedSwapping = true;
+	}
 }
 
 void UCombatComponent::EquipPrimaryWeapon(AWeapon* WeaponToEquip)
@@ -434,7 +453,7 @@ void UCombatComponent::EquipPrimaryWeapon(AWeapon* WeaponToEquip)
 	EquippedWeapon->SetHUDAmmo();
 	UpdateCarriedAmmo();
 
-	PlayEquipWeaponSound(WeaponToEquip);
+	PlayEquipWeaponSound(EquippedWeapon);
 
 	ReloadEmptyWeapon();
 }
@@ -445,8 +464,8 @@ void UCombatComponent::EquipSecondaryWeapon(AWeapon* WeaponToEquip)
 	
 	SecondaryWeapon = WeaponToEquip;
 	SecondaryWeapon->SetWeaponState(EWeaponState::EWS_EquippedSecondary);
-	PlayEquipWeaponSound(WeaponToEquip);
-	AttachActorToBackpack(WeaponToEquip);
+	PlayEquipWeaponSound(SecondaryWeapon);
+	AttachActorToBackpack(SecondaryWeapon);
 	SecondaryWeapon->SetOwner(Character);
 }
 
@@ -513,7 +532,7 @@ void UCombatComponent::AttachActorToBackpack(AActor* ActorToAttach)
 void UCombatComponent::UpdateCarriedAmmo()
 {
 	if (!EquippedWeapon) return;
-
+	
 	if (CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
 	{
 		CarriedAmmo = CarriedAmmoMap[EquippedWeapon->GetWeaponType()];
@@ -568,6 +587,17 @@ void UCombatComponent::Reload()
 	}
 }
 
+void UCombatComponent::ServerReload_Implementation()
+{
+	if (Character == nullptr || EquippedWeapon == nullptr) return;
+
+	CombatState = ECombatState::ECS_Reloading;
+	if(!Character->IsLocallyControlled())
+	{
+		HandleReload();
+	}
+}
+
 void UCombatComponent::FinishReloading()
 {
 	if (Character == nullptr) return;
@@ -592,33 +622,33 @@ void UCombatComponent::FinishSwap()
 	{
 		CombatState = ECombatState::ECS_Unoccupied;
 	}
+	if(Character)
+	{
+		Character->bFinishedSwapping = true;
+	}
 }
 
 void UCombatComponent::FinishSwapAttachedWeapon()
 {
+	/*if(!Character || !Character->HasAuthority()) return;
+	
 	Swap(EquippedWeapon, SecondaryWeapon);
 	
-	EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
 	SecondaryWeapon->SetWeaponState(EWeaponState::EWS_EquippedSecondary);
-	
 	AttachActorToBackpack(SecondaryWeapon);
+
+	EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);
 	AttachActorToRightHand(EquippedWeapon);
-	
 	EquippedWeapon->SetHUDAmmo();
 	UpdateCarriedAmmo();
-	
 	PlayEquipWeaponSound(EquippedWeapon);
-}
 
-void UCombatComponent::ServerReload_Implementation()
-{
-	if (Character == nullptr || EquippedWeapon == nullptr) return;
+	ReloadEmptyWeapon();
 
-	CombatState = ECombatState::ECS_Reloading;
-	if(!Character->IsLocallyControlled())
+	if(Character)
 	{
-		HandleReload();
-	}
+		Character->bFinishedSwapping = true;
+	}*/
 }
 
 void UCombatComponent::HandleReload()
@@ -731,7 +761,7 @@ void UCombatComponent::UpdateShotgunAmmoValue()
 }
 
 void UCombatComponent::OnRep_EquippedWeapon()
-{
+{	
 	if (EquippedWeapon && Character)
 	{
 		EquippedWeapon->SetWeaponState(EWeaponState::EWS_Equipped);

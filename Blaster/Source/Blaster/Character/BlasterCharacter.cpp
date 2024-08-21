@@ -493,7 +493,7 @@ void ABlasterCharacter::PlaySwapMontage()
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && SwapMontage)
 	{
-		AnimInstance->Montage_Play(SwapMontage);
+		AnimInstance->Montage_Play(SwapMontage, 3.0f);
 	}
 }
 
@@ -588,6 +588,7 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ThisClass::Jump);
 		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &ThisClass::EquipButtonPressed);
+		EnhancedInputComponent->BindAction(SwapAction, ETriggerEvent::Triggered, this, &ThisClass::SwapButtonPressed);
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &ThisClass::CrouchButtonPressed);
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &ThisClass::AimButtonPressed);
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &ThisClass::AimButtonReleased);
@@ -735,12 +736,6 @@ void ABlasterCharacter::EquipButtonPressed()
 		{
 			ServerEquipButtonPressed();
 		}
-		bool bSwap = CombatComponent->ShouldSwapWeapon() && !HasAuthority() && CombatComponent->CombatState == ECombatState::ECS_Unoccupied && OverlappingWeapon == nullptr;
-		if (bSwap)
-		{
-			PlaySwapMontage();
-			CombatComponent->CombatState = ECombatState::ECS_SwappingWeapons;
-		}
 	}
 }
 
@@ -753,7 +748,31 @@ void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 		{
 			CombatComponent->EquipWeapon(OverlappingWeapon);
 		}
-		else if(CombatComponent->ShouldSwapWeapon())
+	}
+}
+
+void ABlasterCharacter::SwapButtonPressed()
+{
+	if (bDisableGameplay || !CombatComponent) return;
+
+	if(CombatComponent->CombatState == ECombatState::ECS_Unoccupied)
+	{
+		ServerSwapButtonPressed();
+		if (CombatComponent->ShouldSwapWeapon() && !HasAuthority())
+		{
+			PlaySwapMontage();
+			CombatComponent->CombatState = ECombatState::ECS_SwappingWeapons;
+			bFinishedSwapping = false;
+		}
+	}
+	
+}
+
+void ABlasterCharacter::ServerSwapButtonPressed_Implementation()
+{
+	if (CombatComponent)
+	{
+		if(CombatComponent->ShouldSwapWeapon())
 		{
 			CombatComponent->SwapWeapon();
 		}
@@ -976,7 +995,7 @@ void ABlasterCharacter::TurnInPlace(float DeltaTime)
 
 	if (TurningInPlace != ETurningInPlace::ETIP_NotTurning)
 	{
-		InterpAO_Yaw = FMath::FInterpTo(InterpAO_Yaw, 0.f, DeltaTime, 4.f);
+		InterpAO_Yaw = FMath::FInterpTo(InterpAO_Yaw, 0.f, DeltaTime, 8.f);
 		AO_Yaw = InterpAO_Yaw;
 
 		if (FMath::Abs(AO_Yaw) < 15.f)

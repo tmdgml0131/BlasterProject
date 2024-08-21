@@ -75,6 +75,8 @@ public:
 	void MulticastLostTheLead();
 
 	void SetTeamColor(ETeam Team);
+
+	bool bFinishedSwapping = false;
 protected:
 	void InitializeInputSetup();
 	virtual void BeginPlay() override;
@@ -98,6 +100,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* EquipAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* SwapAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* CrouchAction;
@@ -133,6 +138,7 @@ protected:
 	void ThrowGrenadeButtonPressed();
 	void AimOffset(float DeltaTime);
 	void ReloadButtonPressed();
+	void SwapButtonPressed();
 
 	void CalculateAO_Pitch();
 
@@ -236,7 +242,10 @@ private:
 
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
-
+	
+	UFUNCTION(Server, Reliable)
+	void ServerSwapButtonPressed();
+	
 	UFUNCTION(Server, Reliable)
 	void ServerRunButtonPressed();
 	
